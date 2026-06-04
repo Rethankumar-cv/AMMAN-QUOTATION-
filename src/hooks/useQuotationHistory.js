@@ -45,6 +45,13 @@ export const useQuotationHistory = () => {
     }
   };
 
+  const restoreQuotation = async (quote) => {
+    if (window.confirm(`Restore quotation ${quote.quotationRefNo || 'Draft'} to active drafts?`)) {
+      await saveQuotation({ ...quote, status: 'draft', updatedAt: new Date().toISOString() });
+      await loadQuotations();
+    }
+  };
+
   const duplicateQuotation = async (originalQuote) => {
     if (window.confirm(`Clone quotation for ${originalQuote.customerDetails.customerName}?`)) {
       const clonedQuote = {
@@ -121,6 +128,7 @@ export const useQuotationHistory = () => {
     loadQuotations,
     removeQuotation,
     archiveQuotation,
+    restoreQuotation,
     duplicateQuotation,
     openForEdit,
     openForView

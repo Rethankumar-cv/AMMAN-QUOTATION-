@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Download, Share2, Printer, RefreshCw, ExternalLink } from 'lucide-react';
+import { Download, Share2, Printer, RefreshCw, ExternalLink, Edit2, Copy, Archive } from 'lucide-react';
 import Button from '../components/common/Button';
 import { getQuotationById, saveQuotation } from '../services/quotationService';
 import { mapQuotationData } from '../utils/quotationMapper';
@@ -62,6 +62,36 @@ const Preview = () => {
     await saveQuotation(quoteToSave);
     if (id === 'draft') localStorage.removeItem('aem_wip_draft'); 
     navigate('/history');
+  };
+
+  const handleEdit = () => {
+    if (id === 'draft') navigate('/create');
+    else navigate(`/edit/${id}`);
+  };
+
+  const handleArchive = async () => {
+    if (window.confirm("Move this quotation to archive?")) {
+      const { formatted, ...cleanData } = data;
+      const quoteToSave = { ...cleanData, status: 'archived', updatedAt: new Date().toISOString() };
+      await saveQuotation(quoteToSave);
+      navigate('/history');
+    }
+  };
+
+  const handleClone = async () => {
+    if (window.confirm("Create a copy of this quotation?")) {
+      const { formatted, ...cleanData } = data;
+      const clonedQuote = {
+        ...cleanData,
+        id: crypto.randomUUID(),
+        quotationRefNo: '',
+        status: 'draft',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      await saveQuotation(clonedQuote);
+      navigate(`/edit/${clonedQuote.id}`);
+    }
   };
 
   const getSafeFilename = () => {
@@ -168,6 +198,22 @@ const Preview = () => {
               {data.status === 'draft' ? 'Reviewing Draft' : 'Viewing Finalized Record'}
             </p>
           </div>
+        </div>
+        
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={handleEdit} style={{ backgroundColor: 'white', padding: '8px 12px' }}>
+            <Edit2 size={16} style={{ marginRight: '6px' }} /> Edit
+          </Button>
+          {id !== 'draft' && (
+            <>
+              <Button variant="outline" onClick={handleClone} style={{ backgroundColor: 'white', padding: '8px 12px' }} className="hidden sm:flex">
+                <Copy size={16} style={{ marginRight: '6px' }} /> Clone
+              </Button>
+              <Button variant="outline" onClick={handleArchive} style={{ backgroundColor: 'white', padding: '8px 12px' }} className="hidden sm:flex">
+                <Archive size={16} style={{ marginRight: '6px' }} /> Archive
+              </Button>
+            </>
+          )}
         </div>
       </div>
 

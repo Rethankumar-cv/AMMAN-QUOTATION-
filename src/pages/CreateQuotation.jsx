@@ -93,7 +93,7 @@ const CreateQuotation = () => {
       localStorage.removeItem(wipKey);
     }
     
-    window.alert("Draft saved successfully to your archive!");
+    window.alert("Draft saved successfully! You can find it in your Quotation History.");
     navigate('/history');
   };
 

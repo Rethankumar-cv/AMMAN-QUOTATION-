@@ -19,6 +19,7 @@ const QuotationHistory = () => {
     paginatedQuotations, totalResults,
     removeQuotation,
     archiveQuotation,
+    restoreQuotation,
     duplicateQuotation,
     openForEdit,
     openForView
@@ -30,7 +31,7 @@ const QuotationHistory = () => {
       {/* Header & Quick Stats */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-h1" style={{ margin: '0 0 4px 0' }}>Document Archive</h1>
+          <h1 className="text-h1" style={{ margin: '0 0 4px 0' }}>Quotation History</h1>
           <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)' }}>
             Managing {totalResults} {totalResults === 1 ? 'record' : 'records'}
           </span>
@@ -168,12 +169,16 @@ const QuotationHistory = () => {
               </div>
 
               <div className="flex gap-1">
-                {q.status !== 'archived' && (
+                {q.status === 'archived' ? (
+                  <Button variant="outline" style={{ padding: '6px 12px', fontSize: 'var(--font-size-xs)' }} onClick={() => restoreQuotation(q)} title="Restore Quotation">
+                    Restore
+                  </Button>
+                ) : (
                   <Button variant="text" onClick={() => archiveQuotation(q)} title="Archive">
                     <Archive size={16} />
                   </Button>
                 )}
-                <Button variant="text" style={{ color: 'var(--color-error)' }} onClick={() => removeQuotation(q.id)} title="Delete">
+                <Button variant="text" style={{ color: 'var(--color-error)' }} onClick={() => removeQuotation(q.id)} title="Delete Permanently">
                   <Trash2 size={16} />
                 </Button>
               </div>
