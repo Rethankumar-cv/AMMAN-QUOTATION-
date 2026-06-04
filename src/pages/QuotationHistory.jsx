@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, Eye, Edit2, Copy, Trash2, Plus, Archive, ArrowDownToLine, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
+import { Search, Filter, Eye, Edit2, Copy, Trash2, Plus, Archive, ArrowDownToLine, ChevronLeft, ChevronRight, FileText, Share2, Download } from 'lucide-react';
 import Card from '../components/common/Card';
 import Badge from '../components/common/Badge';
 import Button from '../components/common/Button';
@@ -22,7 +22,8 @@ const QuotationHistory = () => {
     restoreQuotation,
     duplicateQuotation,
     openForEdit,
-    openForView
+    openForView,
+    openForAction
   } = useQuotationHistory();
   
   return (
@@ -149,20 +150,23 @@ const QuotationHistory = () => {
             {/* Action Bar */}
             <div style={{ backgroundColor: 'var(--bg-app)', padding: '12px 20px', borderTop: '1px solid var(--border-default)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div className="flex gap-2">
-                {q.status === 'draft' ? (
-                  <Button variant="outline" style={{ padding: '6px 16px', backgroundColor: 'white' }} onClick={() => openForEdit(q.id)}>
+                {q.status === 'draft' && (
+                  <Button variant="outline" style={{ padding: '6px 12px', backgroundColor: 'white' }} onClick={() => openForEdit(q.id)}>
                     <Edit2 size={16} /> Edit
                   </Button>
-                ) : (
-                  <>
-                    <Button variant="outline" style={{ padding: '6px 16px', backgroundColor: 'white' }} onClick={() => openForView(q.id)}>
-                      <Eye size={16} /> View
-                    </Button>
-                    <Button variant="outline" style={{ padding: '6px 16px', backgroundColor: 'white' }} onClick={() => openForView(q.id)}>
-                      <ArrowDownToLine size={16} /> PDF
-                    </Button>
-                  </>
                 )}
+                
+                <Button variant="outline" style={{ padding: '6px 12px', backgroundColor: 'white' }} onClick={() => openForView(q.id)} title="Preview">
+                  <Eye size={16} /> <span className="hidden sm:inline" style={{marginLeft:'4px'}}>Preview</span>
+                </Button>
+                
+                <Button variant="outline" style={{ padding: '6px 12px', backgroundColor: 'white' }} onClick={() => openForAction(q.id, 'download')} title="Download PDF">
+                  <Download size={16} /> <span className="hidden sm:inline" style={{marginLeft:'4px'}}>Download</span>
+                </Button>
+                
+                <Button variant="outline" style={{ padding: '6px 12px', backgroundColor: 'white' }} onClick={() => openForAction(q.id, 'share')} title="Share">
+                  <Share2 size={16} /> <span className="hidden sm:inline" style={{marginLeft:'4px'}}>Share</span>
+                </Button>
                 <Button variant="text" onClick={() => duplicateQuotation(q)} title="Duplicate">
                   <Copy size={16} />
                 </Button>

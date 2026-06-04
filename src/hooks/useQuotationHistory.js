@@ -70,6 +70,7 @@ export const useQuotationHistory = () => {
 
   const openForEdit = (id) => navigate(`/edit/${id}`);
   const openForView = (id) => navigate(`/preview/${id}`);
+  const openForAction = (id, action) => navigate(`/preview/${id}?autoAction=${action}`);
 
   // Memoized search filtering and sorting for fast local retrieval
   const processedQuotations = useMemo(() => {
@@ -131,6 +132,7 @@ export const useQuotationHistory = () => {
     restoreQuotation,
     duplicateQuotation,
     openForEdit,
-    openForView
+    openForView,
+    openForAction
   };
 };

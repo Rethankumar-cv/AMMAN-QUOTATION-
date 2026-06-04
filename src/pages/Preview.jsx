@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Download, Share2, Printer, RefreshCw, ExternalLink, Edit2, Copy, Archive } from 'lucide-react';
 import Button from '../components/common/Button';
 import { getQuotationById, saveQuotation } from '../services/quotationService';
@@ -10,6 +10,8 @@ import { getSettings } from '../services/settingsService';
 const Preview = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const autoAction = searchParams.get('autoAction');
 
   const [data, setData] = useState(null);
   const [profile, setProfile] = useState({});
@@ -49,6 +51,21 @@ const Preview = () => {
     };
     fetchQuote();
   }, [id]);
+
+  useEffect(() => {
+    if (!loading && data && autoAction && printRef.current) {
+      // Ensure the DOM has fully painted before taking snapshot
+      const timer = setTimeout(() => {
+        if (autoAction === 'download') handleDownload();
+        else if (autoAction === 'share') handleShare();
+        
+        // Remove param to prevent re-triggering
+        searchParams.delete('autoAction');
+        setSearchParams(searchParams, { replace: true });
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, data, autoAction, searchParams, setSearchParams]);
 
   const showNotification = (msg, isError = false) => {
     setNotification({ msg, isError });
