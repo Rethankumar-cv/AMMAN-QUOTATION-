@@ -1,36 +1,46 @@
 import React from 'react';
 
-const Badge = ({ children, status = 'default' }) => {
-  // status: 'draft' (grey), 'finalized' (orange), 'success' (green), 'default'
+const Badge = ({ status, children, style = {} }) => {
+  let bgColor, color, border;
   
-  let bg = 'var(--color-grey-100)';
-  let color = 'var(--color-grey-600)';
-
-  if (status === 'draft') {
-    bg = 'var(--color-grey-100)';
-    color = 'var(--color-grey-600)';
-  } else if (status === 'finalized') {
-    bg = 'var(--color-orange-100)';
-    color = 'var(--color-orange-600)';
-  } else if (status === 'success') {
-    bg = '#DCFCE7'; // light green
-    color = '#166534'; // dark green
+  switch (status?.toLowerCase()) {
+    case 'finalized':
+      bgColor = '#ECFDF5';
+      color = '#059669';
+      border = '#A7F3D0';
+      break;
+    case 'draft':
+      bgColor = '#FEF4E6';
+      color = '#DE8500';
+      border = '#FDE68A';
+      break;
+    case 'archived':
+      bgColor = '#F3F4F6';
+      color = '#4B5563';
+      border = '#E5E7EB';
+      break;
+    default:
+      bgColor = '#F3F4F6';
+      color = '#4B5563';
+      border = '#E5E7EB';
   }
 
   return (
     <span style={{
       display: 'inline-flex',
       alignItems: 'center',
-      padding: '4px 8px',
+      padding: '2px 8px',
       borderRadius: '12px',
       fontSize: '11px',
-      fontWeight: 'var(--font-weight-bold)',
+      fontWeight: '600',
       textTransform: 'uppercase',
-      letterSpacing: '0.05em',
-      backgroundColor: bg,
-      color: color
+      letterSpacing: '0.5px',
+      backgroundColor: bgColor,
+      color: color,
+      border: `1px solid ${border}`,
+      ...style
     }}>
-      {children}
+      {children || status}
     </span>
   );
 };

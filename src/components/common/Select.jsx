@@ -1,31 +1,25 @@
 import React from 'react';
 
-const Select = ({ label, error, required, options = [], className = '', ...props }) => {
+const Select = ({ label, options, error, required, ...props }) => {
   return (
-    <div className={`form-group ${className}`}>
+    <div className="form-group">
       {label && (
         <label className="form-label">
-          {label} {required && <span style={{color: 'var(--color-error)'}}>*</span>}
+          {label} {required && <span style={{ color: 'var(--color-error)' }}>*</span>}
         </label>
       )}
-      <div style={{ position: 'relative' }}>
-        <select 
-          className={`form-input ${error ? 'error' : ''}`}
-          style={{ appearance: 'none', backgroundColor: '#fff', width: '100%', paddingRight: '36px' }}
-          {...props}
-        >
-          <option value="" disabled>Select an option</option>
-          {options.map((opt, i) => (
-            <option key={i} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
-        {/* Custom Chevron icon to replace the default ugly browser dropdown arrow on mobile */}
-        <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--color-grey-500)' }}>
-          <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-      </div>
+      <select 
+        className={`form-input ${error ? 'error' : ''}`}
+        style={{ appearance: 'none', backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236D6E71%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right .7rem top 50%', backgroundSize: '.65rem auto' }}
+        {...props}
+      >
+        <option value="" disabled>Select an option</option>
+        {options.map((opt, i) => (
+          <option key={i} value={typeof opt === 'string' ? opt : opt.value}>
+            {typeof opt === 'string' ? opt : opt.label}
+          </option>
+        ))}
+      </select>
       {error && <span className="error-text">{error}</span>}
     </div>
   );

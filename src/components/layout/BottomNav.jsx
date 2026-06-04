@@ -1,63 +1,73 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { Home, FileText, Settings } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
+import { LayoutDashboard, FileText, Settings, History } from 'lucide-react';
 
 const BottomNav = () => {
-  const location = useLocation();
-  
-  // Hide the bottom navigation bar on screens where we want a full-height wizard or custom sticky action buttons.
-  const hideOnPaths = ['/create', '/preview'];
-  if (hideOnPaths.some(path => location.pathname.startsWith(path))) {
-    return null;
-  }
-
   return (
-    <nav style={navStyle}>
-      <NavLink to="/" style={linkStyle} className={({isActive}) => isActive ? 'nav-active' : ''}>
-        <Home size={24} />
-        <span style={textStyle}>Home</span>
-      </NavLink>
-      <NavLink to="/history" style={linkStyle} className={({isActive}) => isActive ? 'nav-active' : ''}>
-        <FileText size={24} />
-        <span style={textStyle}>History</span>
-      </NavLink>
-      <NavLink to="/settings" style={linkStyle} className={({isActive}) => isActive ? 'nav-active' : ''}>
-        <Settings size={24} />
-        <span style={textStyle}>Settings</span>
-      </NavLink>
+    <nav className="no-print" style={navStyle}>
+      <div style={containerStyle}>
+        <NavLink to="/" style={linkStyle} className={({isActive}) => isActive ? 'nav-active' : ''} end>
+          <LayoutDashboard size={20} />
+          <span style={labelStyle}>Dashboard</span>
+        </NavLink>
+        
+        <NavLink to="/create" style={linkStyle} className={({isActive}) => isActive ? 'nav-active' : ''}>
+          <FileText size={20} />
+          <span style={labelStyle}>New Quote</span>
+        </NavLink>
+        
+        <NavLink to="/history" style={linkStyle} className={({isActive}) => isActive ? 'nav-active' : ''}>
+          <History size={20} />
+          <span style={labelStyle}>History</span>
+        </NavLink>
+        
+        <NavLink to="/settings" style={linkStyle} className={({isActive}) => isActive ? 'nav-active' : ''}>
+          <Settings size={20} />
+          <span style={labelStyle}>Settings</span>
+        </NavLink>
+      </div>
     </nav>
   );
 };
 
 const navStyle = {
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  backgroundColor: 'var(--bg-surface)',
+  borderTop: '1px solid var(--border-default)',
+  paddingBottom: 'env(safe-area-inset-bottom)',
+  zIndex: 100,
+  boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.03)'
+};
+
+const containerStyle = {
   display: 'flex',
   justifyContent: 'space-around',
   alignItems: 'center',
-  backgroundColor: 'var(--bg-surface)',
-  borderTop: '1px solid var(--border-default)',
-  padding: '8px 0',
-  paddingBottom: 'calc(8px + env(safe-area-inset-bottom))', // For modern iOS notches
-  position: 'sticky',
-  bottom: 0,
-  zIndex: 100,
-  boxShadow: '0 -2px 10px rgba(0,0,0,0.05)'
+  height: '64px',
+  maxWidth: '1024px',
+  margin: '0 auto'
 };
 
 const linkStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  textDecoration: 'none',
+  justifyContent: 'center',
   color: 'var(--text-secondary)',
-  padding: '8px 16px',
-  transition: 'color 0.2s'
+  textDecoration: 'none',
+  flex: 1,
+  height: '100%',
+  transition: 'color 0.2s ease',
+  gap: '4px'
 };
 
-const textStyle = {
-  fontSize: '10px',
-  marginTop: '4px',
-  fontWeight: 'var(--font-weight-medium)',
-  textTransform: 'uppercase'
+const labelStyle = {
+  fontSize: '11px',
+  fontWeight: '500',
+  letterSpacing: '0.2px'
 };
 
 export default BottomNav;

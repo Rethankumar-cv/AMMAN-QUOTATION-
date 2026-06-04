@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { WifiOff } from 'lucide-react';
+import { WifiOff, FileText } from 'lucide-react';
 
 const Header = () => {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
@@ -19,7 +19,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header style={headerStyle}>
+    <header className="no-print" style={headerStyle}>
       <div style={contentStyle}>
         <Link to="/" style={logoLinkStyle}>
           <div style={logoContainerStyle}>
@@ -29,25 +29,32 @@ const Header = () => {
               style={logoImageStyle} 
               onError={(e) => {
                 e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'block';
+                e.target.nextSibling.style.display = 'flex';
               }}
             />
-            <span style={fallbackTextStyle}>
-              <span style={{color: 'var(--color-grey-500)'}}>AMMAN</span>
-              <span style={{color: 'var(--color-orange-500)', marginLeft: '4px'}}>EARTH MOVERS</span>
-            </span>
+            <div style={fallbackTextStyle}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span style={{ color: 'var(--color-grey-800)' }}>AMMAN</span>
+                <span style={{ color: 'var(--color-orange-500)', marginLeft: '4px' }}>EARTH MOVERS</span>
+              </div>
+              <span style={{ fontSize: '10px', color: 'var(--color-grey-500)', fontWeight: 'normal', marginTop: '-2px' }}>
+                Quotation Management
+              </span>
+            </div>
           </div>
         </Link>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {/* Offline Sync-Safe Indicator */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {isOffline && (
             <div style={offlineBadgeStyle} title="You are offline. Quotations will be saved locally.">
               <WifiOff size={14} />
-              <span>Offline Mode</span>
+              <span style={{ display: 'none' }} className="sm:inline">Offline</span>
             </div>
           )}
-          {!isOffline && <div style={titleStyle}>Quote Gen</div>}
+          <div style={appTitleStyle}>
+            <FileText size={16} color="var(--color-orange-500)" />
+            <span style={{ display: 'none', marginLeft: '6px' }} className="sm:inline">Workspace</span>
+          </div>
         </div>
       </div>
     </header>
@@ -57,7 +64,8 @@ const Header = () => {
 const headerStyle = {
   backgroundColor: 'var(--bg-surface)',
   borderBottom: '1px solid var(--border-default)',
-  padding: '12px 16px',
+  borderTop: '4px solid var(--color-orange-500)',
+  padding: '12px 24px',
   position: 'sticky',
   top: 0,
   zIndex: 100,
@@ -77,41 +85,46 @@ const logoLinkStyle = {
 
 const logoContainerStyle = {
   display: 'flex',
-  alignItems: 'center'
+  alignItems: 'center',
+  gap: '12px'
 };
 
 const logoImageStyle = {
-  height: '32px',
+  height: '36px',
   objectFit: 'contain'
 };
 
 const fallbackTextStyle = {
   display: 'none',
-  fontWeight: 'var(--font-weight-extrabold)',
+  flexDirection: 'column',
+  fontWeight: 'var(--font-weight-bold)',
   fontSize: '18px',
-  letterSpacing: '0.5px'
+  letterSpacing: '-0.5px',
+  lineHeight: '1.2'
 };
 
-const titleStyle = {
-  fontSize: 'var(--font-size-xs)',
+const appTitleStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  fontSize: 'var(--font-size-sm)',
   color: 'var(--text-secondary)',
-  fontWeight: 'var(--font-weight-bold)',
-  textTransform: 'uppercase',
-  letterSpacing: '1px'
+  fontWeight: 'var(--font-weight-medium)',
+  backgroundColor: 'var(--bg-app)',
+  padding: '6px 12px',
+  borderRadius: '20px',
+  border: '1px solid var(--border-default)'
 };
 
 const offlineBadgeStyle = {
   display: 'flex',
   alignItems: 'center',
   gap: '4px',
-  backgroundColor: 'var(--color-orange-100)',
-  color: 'var(--color-orange-600)',
-  padding: '4px 8px',
-  borderRadius: '12px',
-  fontSize: '10px',
-  fontWeight: 'bold',
-  textTransform: 'uppercase',
-  border: '1px solid var(--color-orange-500)'
+  backgroundColor: 'var(--color-error-bg)',
+  color: 'var(--color-error)',
+  padding: '6px 10px',
+  borderRadius: '20px',
+  fontSize: '12px',
+  fontWeight: 'var(--font-weight-semibold)',
 };
 
 export default Header;

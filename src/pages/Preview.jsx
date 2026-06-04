@@ -143,25 +143,36 @@ const Preview = () => {
   const fmt = (val) => val && Number(val) !== 0 ? Number(val).toLocaleString('en-IN') : '0';
 
   return (
-    <div className="flex-col gap-4" style={{ paddingBottom: '160px' }}>
+    <div className="flex-col" style={{ paddingBottom: '160px', minHeight: '100vh', backgroundColor: 'var(--color-grey-100)', margin: 'calc(var(--space-6) * -1) calc(var(--space-4) * -1)', padding: 'var(--space-6) var(--space-4)' }}>
       {notification && (
         <div style={{
-          position: 'fixed', top: '20px', left: '50%', transform: 'translateX(-50%)',
-          backgroundColor: notification.isError ? 'var(--color-error)' : 'var(--color-grey-800)',
-          color: 'white', padding: '10px 20px', borderRadius: '30px', zIndex: 9999,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', fontSize: '14px', fontWeight: 'bold'
+          position: 'fixed', top: '24px', left: '50%', transform: 'translateX(-50%)',
+          backgroundColor: notification.isError ? 'var(--color-error)' : 'var(--color-grey-900)',
+          color: 'white', padding: '12px 24px', borderRadius: 'var(--radius-xl)', zIndex: 9999,
+          boxShadow: 'var(--shadow-lg)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-semibold)',
+          display: 'flex', alignItems: 'center', gap: '8px'
         }} className="no-print">
           {notification.msg}
         </div>
       )}
 
-      <div className="flex items-center gap-2 mb-2 no-print">
-        <button onClick={() => navigate(-1)} className="btn-text" style={{ padding: '0 8px', fontSize: '24px' }}>&larr;</button>
-        <h1 className="text-h1" style={{ margin: 0 }}>Document Preview</h1>
+      {/* Workspace Header */}
+      <div className="flex items-center justify-between mb-6 no-print" style={{ maxWidth: '210mm', margin: '0 auto 24px auto' }}>
+        <div className="flex items-center gap-3">
+          <button onClick={() => navigate(-1)} style={{ background: 'white', border: '1px solid var(--border-default)', borderRadius: '50%', padding: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-sm)' }}>
+            <span style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-secondary)' }}>&larr;</span>
+          </button>
+          <div>
+            <h1 className="text-h1" style={{ margin: 0, fontSize: 'var(--font-size-xl)' }}>Document Workspace</h1>
+            <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)' }}>
+              {data.status === 'draft' ? 'Reviewing Draft' : 'Viewing Finalized Record'}
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* A4 Document Container - Target for PDF Engine */}
-      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '16px' }} className="no-print preview-container">
+      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '32px', display: 'flex', justifyContent: 'center' }} className="no-print preview-container">
         <div 
           ref={printRef}
           style={{ 
@@ -173,8 +184,9 @@ const Preview = () => {
             lineHeight: '1.4',
             width: '210mm',
             minHeight: '297mm',
-            margin: '0 auto',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            boxShadow: 'var(--shadow-lg)',
+            borderRadius: 'var(--radius-sm)'
           }}>
             
           {/* Header */}
@@ -320,37 +332,37 @@ const Preview = () => {
         </div>
       </div>
       
-      {/* Sticky Bottom Action Area */}
+      {/* Sticky Bottom Premium Action Area */}
       <div className="no-print" style={{ 
         position: 'fixed', bottom: 0, left: 0, right: 0, 
-        padding: '16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
+        padding: '16px 24px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
         backgroundColor: 'var(--bg-surface)', borderTop: '1px solid var(--border-default)', 
-        boxShadow: '0 -4px 10px rgba(0, 0, 0, 0.05)', zIndex: 90 
+        boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.08)', zIndex: 90 
       }}>
-        <div style={{ maxWidth: '768px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1024px', margin: '0 auto' }}>
           
           {data.status === 'draft' ? (
-            <Button variant="primary" className="w-full" onClick={handleFinalize}>
+            <Button variant="primary" className="w-full" onClick={handleFinalize} style={{ padding: '16px', fontSize: 'var(--font-size-md)', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.4)' }}>
               Confirm & Save Final Quotation
             </Button>
           ) : (
-            <div className="flex-col gap-2">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                <Button variant="outline" onClick={handleShare} disabled={isExporting}>
-                  <Share2 size={16} style={{marginRight:'6px'}}/> Share
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '12px', flex: 1, minWidth: '200px' }}>
+                <Button variant="outline" onClick={handleShare} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }}>
+                  <Share2 size={18} style={{marginRight:'8px'}}/> Share
                 </Button>
-                <Button variant="outline" onClick={handlePrint} disabled={isExporting}>
-                  <Printer size={16} style={{marginRight:'6px'}}/> Print
+                <Button variant="outline" onClick={handlePrint} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }}>
+                  <Printer size={18} style={{marginRight:'8px'}}/> Print
+                </Button>
+                <Button variant="outline" onClick={handleOpenNewTab} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }} className="hidden sm:flex">
+                  <ExternalLink size={18} style={{marginRight:'8px'}}/> Open
                 </Button>
               </div>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                <Button variant="outline" onClick={handleOpenNewTab} disabled={isExporting}>
-                  <ExternalLink size={16} style={{marginRight:'6px'}}/> Open
-                </Button>
-                <Button variant="primary" onClick={handleDownload} disabled={isExporting}>
-                  {isExporting ? <RefreshCw size={16} className="spin" style={{marginRight:'6px'}}/> : <Download size={16} style={{marginRight:'6px'}}/>}
-                  {isExporting ? 'Generating...' : 'Download PDF'}
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <Button variant="primary" className="w-full" onClick={handleDownload} disabled={isExporting} style={{ padding: '12px', height: '100%', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.3)' }}>
+                  {isExporting ? <RefreshCw size={18} className="spin" style={{marginRight:'8px'}}/> : <Download size={18} style={{marginRight:'8px'}}/>}
+                  {isExporting ? 'Generating PDF...' : 'Download PDF Document'}
                 </Button>
               </div>
             </div>

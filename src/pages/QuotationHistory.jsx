@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, Eye, Edit2, Copy, Trash2, Plus, Archive, ArrowDownToLine, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Filter, Eye, Edit2, Copy, Trash2, Plus, Archive, ArrowDownToLine, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 import Card from '../components/common/Card';
 import Badge from '../components/common/Badge';
 import Button from '../components/common/Button';
@@ -25,133 +25,158 @@ const QuotationHistory = () => {
   } = useQuotationHistory();
   
   return (
-    <div className="flex-col gap-4" style={{ paddingBottom: '90px' }}>
+    <div className="flex-col gap-6" style={{ paddingBottom: '100px' }}>
       
       {/* Header & Quick Stats */}
-      <div className="flex justify-between items-end mb-2">
-        <h1 className="text-h1" style={{ margin: 0 }}>Quotations</h1>
-        <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)' }}>
-          {totalResults} {totalResults === 1 ? 'Record' : 'Records'}
-        </span>
-      </div>
-      
-      {/* Advanced Search Bar */}
-      <div className="flex gap-2 mb-2">
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', border: '1px solid var(--border-focus)', borderRadius: 'var(--radius-md)', padding: '10px 14px', backgroundColor: 'var(--bg-surface)', boxShadow: 'var(--shadow-sm)' }}>
-          <Search size={18} color="var(--color-orange-500)" style={{ marginRight: '8px', minWidth: '18px' }} />
-          <input 
-            type="text" 
-            placeholder="Search Ref, Client, Vehicle, Date..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ border: 'none', outline: 'none', width: '100%', fontSize: 'var(--font-size-md)', color: 'var(--text-primary)', backgroundColor: 'transparent' }}
-          />
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-h1" style={{ margin: '0 0 4px 0' }}>Document Archive</h1>
+          <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)' }}>
+            Managing {totalResults} {totalResults === 1 ? 'record' : 'records'}
+          </span>
         </div>
-        <Button variant={showFilters ? 'primary' : 'outline'} onClick={() => setShowFilters(!showFilters)} style={{ padding: '10px 14px', borderRadius: 'var(--radius-md)' }}>
-          <Filter size={20} color={showFilters ? 'white' : 'var(--text-secondary)'} />
+        <Button variant="primary" onClick={() => navigate('/create')} style={{ display: 'none' }} className="sm:inline-flex">
+          <Plus size={16} /> New Quote
         </Button>
       </div>
+      
+      {/* Advanced Search & Filter Bar */}
+      <Card style={{ padding: '16px', marginBottom: '0', backgroundColor: 'var(--bg-surface)' }}>
+        <div className="flex gap-3">
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-md)', padding: '10px 16px', backgroundColor: 'var(--bg-input)', transition: 'border-color 0.2s ease' }} className="search-container">
+            <Search size={18} color="var(--color-grey-500)" style={{ marginRight: '12px', minWidth: '18px' }} />
+            <input 
+              type="text" 
+              placeholder="Search by reference, client, or equipment..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ border: 'none', outline: 'none', width: '100%', fontSize: 'var(--font-size-md)', color: 'var(--text-primary)', backgroundColor: 'transparent' }}
+            />
+          </div>
+          <Button variant={showFilters ? 'primary' : 'outline'} onClick={() => setShowFilters(!showFilters)} style={{ padding: '0 16px', height: 'auto' }}>
+            <Filter size={20} />
+          </Button>
+        </div>
 
-      {/* Expandable Quick Filters & Sorting */}
-      {showFilters && (
-        <Card style={{ backgroundColor: 'var(--color-orange-100)', border: '1px solid var(--color-orange-500)', marginBottom: '16px', padding: '12px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '8px' }}>
-            <div className="flex-col gap-1">
-              <label style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'bold', color: 'var(--text-secondary)' }}>STATUS</label>
-              <select 
-                value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
-                style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--border-default)', fontSize: 'var(--font-size-sm)' }}>
-                <option value="all">Active Only</option>
-                <option value="draft">Drafts</option>
-                <option value="finalized">Finalized</option>
-                <option value="archived">Archived</option>
-              </select>
-            </div>
-            <div className="flex-col gap-1">
-              <label style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'bold', color: 'var(--text-secondary)' }}>SORT BY</label>
-              <select 
-                value={sortBy} onChange={(e) => setSortBy(e.target.value)}
-                style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--border-default)', fontSize: 'var(--font-size-sm)' }}>
-                <option value="date-desc">Newest First</option>
-                <option value="date-asc">Oldest First</option>
-                <option value="amount-desc">Amount (High to Low)</option>
-                <option value="amount-asc">Amount (Low to High)</option>
-              </select>
+        {/* Expandable Quick Filters & Sorting */}
+        {showFilters && (
+          <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-default)' }}>
+            <div className="grid-cols-2">
+              <div className="flex-col gap-2">
+                <label style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-secondary)', letterSpacing: '0.5px' }}>FILTER BY STATUS</label>
+                <div className="flex gap-2 flex-wrap">
+                  {['all', 'draft', 'finalized', 'archived'].map(status => (
+                    <button 
+                      key={status}
+                      onClick={() => setFilterStatus(status)}
+                      style={{ 
+                        padding: '6px 12px', borderRadius: '20px', fontSize: 'var(--font-size-sm)', cursor: 'pointer', border: '1px solid',
+                        backgroundColor: filterStatus === status ? 'var(--color-orange-500)' : 'transparent',
+                        color: filterStatus === status ? 'white' : 'var(--text-secondary)',
+                        borderColor: filterStatus === status ? 'var(--color-orange-500)' : 'var(--border-default)',
+                        textTransform: 'capitalize'
+                      }}
+                    >
+                      {status === 'all' ? 'Active Only' : status}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex-col gap-2">
+                <label style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-secondary)', letterSpacing: '0.5px' }}>SORT BY</label>
+                <select 
+                  value={sortBy} onChange={(e) => setSortBy(e.target.value)}
+                  style={{ padding: '10px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-default)', fontSize: 'var(--font-size-sm)', backgroundColor: 'var(--bg-input)', outline: 'none' }}>
+                  <option value="date-desc">Newest First</option>
+                  <option value="date-asc">Oldest First</option>
+                  <option value="amount-desc">Amount (High to Low)</option>
+                  <option value="amount-asc">Amount (Low to High)</option>
+                </select>
+              </div>
             </div>
           </div>
-        </Card>
-      )}
+        )}
+      </Card>
 
       {/* Empty State */}
       {!loading && paginatedQuotations.length === 0 && (
-        <Card style={{ textAlign: 'center', padding: '60px 20px', borderStyle: 'dashed' }}>
-          <div style={{ backgroundColor: 'var(--color-grey-100)', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-             <Search size={32} color="var(--color-grey-500)" />
+        <Card style={{ textAlign: 'center', padding: '64px 24px', backgroundColor: 'var(--bg-app)', border: '1px dashed var(--border-default)' }}>
+          <div style={{ backgroundColor: 'white', width: '72px', height: '72px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', boxShadow: 'var(--shadow-sm)' }}>
+             <FileText size={32} color="var(--color-grey-400)" />
           </div>
-          <h2 className="text-h2" style={{ color: 'var(--text-primary)' }}>No Quotations Found</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>Try adjusting your search criteria or create a new one.</p>
-          <Button variant="primary" onClick={() => navigate('/create')}>Create Quotation</Button>
+          <h2 className="text-h2" style={{ color: 'var(--text-primary)', marginBottom: '8px' }}>No Documents Found</h2>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', maxWidth: '300px', margin: '0 auto 24px' }}>
+            {searchQuery ? "We couldn't find anything matching your search." : "Your archive is currently empty. Generate a quote to see it here."}
+          </p>
+          {!searchQuery && (
+            <Button variant="primary" onClick={() => navigate('/create')}>Create First Quotation</Button>
+          )}
         </Card>
       )}
 
       {/* Dynamic List */}
-      <div className="flex-col gap-3">
+      <div className="flex-col gap-4">
         {paginatedQuotations.map(q => (
-          <Card key={q.id} style={{ padding: '16px', opacity: q.status === 'archived' ? 0.7 : 1 }}>
-            
-            <div className="flex justify-between items-start mb-2">
-              <div className="flex items-center gap-2" style={{ maxWidth: '65%' }}>
-                <span className="text-truncate" style={{ fontWeight: 'var(--font-weight-bold)', color: 'var(--text-primary)', fontSize: 'var(--font-size-md)' }}>
-                  {q.quotationRefNo || 'Unassigned Draft'}
-                </span>
-                <Badge status={q.status}>{q.status}</Badge>
+          <Card key={q.id} style={{ padding: '0', opacity: q.status === 'archived' ? 0.7 : 1, overflow: 'hidden' }}>
+            <div style={{ padding: '20px' }}>
+              <div className="flex justify-between items-start mb-3">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-3">
+                    <span style={{ fontWeight: 'var(--font-weight-bold)', color: 'var(--text-primary)', fontSize: 'var(--font-size-lg)', letterSpacing: '-0.5px' }}>
+                      {q.quotationRefNo || 'Unassigned Draft'}
+                    </span>
+                    <Badge status={q.status} />
+                  </div>
+                  <div style={{ fontSize: 'var(--font-size-md)', color: 'var(--text-primary)', fontWeight: 'var(--font-weight-medium)' }}>
+                    {q.customerDetails.companyName || q.customerDetails.customerName}
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontWeight: 'var(--font-weight-bold)', color: 'var(--color-orange-600)', fontSize: 'var(--font-size-xl)' }}>
+                    ₹{(q.pricingBreakdown?.grandTotal || 0).toLocaleString('en-IN')}
+                  </div>
+                </div>
               </div>
-              <div style={{ fontWeight: 'var(--font-weight-bold)', color: 'var(--color-orange-600)', fontSize: 'var(--font-size-lg)' }}>
-                ₹{(q.pricingBreakdown?.grandTotal || 0).toLocaleString()}
+              
+              <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                <span className="flex items-center gap-1"><FileText size={14}/> {q.jobDetails.equipmentType}</span>
+                <span>&bull;</span>
+                <span>{new Date(q.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
               </div>
-            </div>
-            
-            <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: '1.4' }}>
-              <div className="text-truncate"><strong style={{color: 'var(--text-primary)'}}>{q.customerDetails.customerName}</strong> {q.customerDetails.companyName && `(${q.customerDetails.companyName})`}</div>
-              <div className="text-truncate">{q.jobDetails.equipmentType} &middot; Created: {new Date(q.createdAt).toLocaleDateString()}</div>
             </div>
 
-            {/* Comprehensive Action Buttons */}
-            <div className="flex justify-between items-center" style={{ borderTop: '1px solid var(--border-light)', paddingTop: '12px', marginTop: '4px' }}>
-              
+            {/* Action Bar */}
+            <div style={{ backgroundColor: 'var(--bg-app)', padding: '12px 20px', borderTop: '1px solid var(--border-default)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div className="flex gap-2">
                 {q.status === 'draft' ? (
-                  <Button variant="outline" style={{ padding: '6px 12px', fontSize: 'var(--font-size-xs)' }} onClick={() => openForEdit(q.id)}>
-                    <Edit2 size={14} style={{ marginRight: '4px' }}/> Edit
+                  <Button variant="outline" style={{ padding: '6px 16px', backgroundColor: 'white' }} onClick={() => openForEdit(q.id)}>
+                    <Edit2 size={16} /> Edit
                   </Button>
                 ) : (
                   <>
-                    <Button variant="primary" style={{ padding: '6px 12px', fontSize: 'var(--font-size-xs)' }} onClick={() => openForView(q.id)}>
-                      <Eye size={14} style={{ marginRight: '4px' }}/> View
+                    <Button variant="outline" style={{ padding: '6px 16px', backgroundColor: 'white' }} onClick={() => openForView(q.id)}>
+                      <Eye size={16} /> View
                     </Button>
-                    <Button variant="outline" style={{ padding: '6px 12px', fontSize: 'var(--font-size-xs)' }} onClick={() => openForView(q.id)}>
-                      <ArrowDownToLine size={14} style={{ marginRight: '4px' }}/> PDF
+                    <Button variant="outline" style={{ padding: '6px 16px', backgroundColor: 'white' }} onClick={() => openForView(q.id)}>
+                      <ArrowDownToLine size={16} /> PDF
                     </Button>
                   </>
                 )}
-                
-                <Button variant="outline" style={{ padding: '6px 12px', fontSize: 'var(--font-size-xs)' }} onClick={() => duplicateQuotation(q)}>
-                  <Copy size={14} style={{ marginRight: '4px' }}/> Clone
+                <Button variant="text" onClick={() => duplicateQuotation(q)} title="Duplicate">
+                  <Copy size={16} />
                 </Button>
               </div>
 
-              {/* Danger Zone Actions */}
               <div className="flex gap-1">
                 {q.status !== 'archived' && (
-                  <Button variant="text" style={{ padding: '6px', color: 'var(--color-grey-500)' }} onClick={() => archiveQuotation(q)} title="Archive">
-                    <Archive size={18} />
+                  <Button variant="text" onClick={() => archiveQuotation(q)} title="Archive">
+                    <Archive size={16} />
                   </Button>
                 )}
-                <Button variant="text" style={{ padding: '6px', color: 'var(--color-error)' }} onClick={() => removeQuotation(q.id)} title="Delete Permanently">
-                  <Trash2 size={18} />
+                <Button variant="text" style={{ color: 'var(--color-error)' }} onClick={() => removeQuotation(q.id)} title="Delete">
+                  <Trash2 size={16} />
                 </Button>
               </div>
-
             </div>
           </Card>
         ))}
@@ -159,23 +184,25 @@ const QuotationHistory = () => {
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between mt-4" style={{ backgroundColor: 'var(--bg-surface)', padding: '12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-default)' }}>
-          <Button variant="outline" style={{ padding: '6px 12px' }} disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>
+        <div className="flex items-center justify-between mt-6" style={{ backgroundColor: 'var(--bg-surface)', padding: '12px 20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-sm)' }}>
+          <Button variant="outline" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>
             <ChevronLeft size={16} /> Prev
           </Button>
-          <span style={{ fontSize: 'var(--font-size-sm)', fontWeight: 'bold', color: 'var(--text-secondary)' }}>
+          <span style={{ fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-primary)' }}>
             Page {currentPage} of {totalPages}
           </span>
-          <Button variant="outline" style={{ padding: '6px 12px' }} disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>
+          <Button variant="outline" disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>
             Next <ChevronRight size={16} />
           </Button>
         </div>
       )}
       
-      {/* Floating Action Button for mobile quick-add */}
+      {/* Mobile FAB */}
       <button 
         onClick={() => navigate('/create')}
-        style={{ position: 'fixed', bottom: '80px', right: '16px', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'var(--color-orange-500)', color: 'white', border: 'none', boxShadow: '0 4px 12px rgba(243, 146, 0, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 90, cursor: 'pointer' }}>
+        className="sm:hidden"
+        style={{ position: 'fixed', bottom: '80px', right: '20px', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'var(--color-orange-500)', color: 'white', border: 'none', boxShadow: '0 4px 16px rgba(243, 146, 0, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 90, cursor: 'pointer', transition: 'transform 0.2s' }}
+      >
         <Plus size={24} />
       </button>
     </div>

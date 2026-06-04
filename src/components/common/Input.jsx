@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Input = ({ label, error, required, className = '', ...props }) => {
+const Input = ({ label, error, required, ...props }) => {
   return (
-    <div className={`form-group ${className}`}>
+    <div className="form-group">
       {label && (
         <label className="form-label">
-          {label} {required && <span style={{color: 'var(--color-error)'}}>*</span>}
+          {label} {required && <span style={{ color: 'var(--color-error)' }}>*</span>}
         </label>
       )}
       <input 
