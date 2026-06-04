@@ -339,34 +339,34 @@ const Preview = () => {
         backgroundColor: 'var(--bg-surface)', borderTop: '1px solid var(--border-default)', 
         boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.08)', zIndex: 90 
       }}>
-        <div style={{ maxWidth: '1024px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           
-          {data.status === 'draft' ? (
+          {data.status === 'draft' && (
             <Button variant="primary" className="w-full" onClick={handleFinalize} style={{ padding: '16px', fontSize: 'var(--font-size-md)', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.4)' }}>
               Confirm & Save Final Quotation
             </Button>
-          ) : (
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <div style={{ display: 'flex', gap: '12px', flex: 1, minWidth: '200px' }}>
-                <Button variant="outline" onClick={handleShare} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }}>
-                  <Share2 size={18} style={{marginRight:'8px'}}/> Share
-                </Button>
-                <Button variant="outline" onClick={handlePrint} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }}>
-                  <Printer size={18} style={{marginRight:'8px'}}/> Print
-                </Button>
-                <Button variant="outline" onClick={handleOpenNewTab} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }} className="hidden sm:flex">
-                  <ExternalLink size={18} style={{marginRight:'8px'}}/> Open
-                </Button>
-              </div>
-              
-              <div style={{ flex: 1, minWidth: '200px' }}>
-                <Button variant="primary" className="w-full" onClick={handleDownload} disabled={isExporting} style={{ padding: '12px', height: '100%', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.3)' }}>
-                  {isExporting ? <RefreshCw size={18} className="spin" style={{marginRight:'8px'}}/> : <Download size={18} style={{marginRight:'8px'}}/>}
-                  {isExporting ? 'Generating PDF...' : 'Download PDF Document'}
-                </Button>
-              </div>
-            </div>
           )}
+          
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '12px', flex: 1, minWidth: '200px' }}>
+              <Button variant="outline" onClick={handleShare} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }}>
+                <Share2 size={18} style={{marginRight:'8px'}}/> Share
+              </Button>
+              <Button variant="outline" onClick={handlePrint} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }}>
+                <Printer size={18} style={{marginRight:'8px'}}/> Print
+              </Button>
+              <Button variant="outline" onClick={handleOpenNewTab} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }} className="hidden sm:flex">
+                <ExternalLink size={18} style={{marginRight:'8px'}}/> Open
+              </Button>
+            </div>
+            
+            <div style={{ flex: 1, minWidth: '200px' }}>
+              <Button variant="outline" className="w-full" onClick={handleDownload} disabled={isExporting} style={{ padding: '12px', height: '100%', backgroundColor: 'white', color: 'var(--text-primary)', border: '1px solid var(--border-default)' }}>
+                {isExporting ? <RefreshCw size={18} className="spin" style={{marginRight:'8px'}}/> : <Download size={18} style={{marginRight:'8px'}}/>}
+                {isExporting ? 'Generating PDF...' : 'Download PDF Document'}
+              </Button>
+            </div>
+          </div>
 
         </div>
       </div>
