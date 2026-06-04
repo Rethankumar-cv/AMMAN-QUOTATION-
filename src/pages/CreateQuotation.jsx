@@ -9,7 +9,7 @@ import Textarea from '../components/common/Textarea';
 import Button from '../components/common/Button';
 import { useQuotationForm } from '../hooks/useQuotationForm';
 import { generateNextReferenceNumber } from '../utils/referenceGenerator';
-import { getQuotationById } from '../services/quotationService';
+import { getQuotationById, saveQuotation } from '../services/quotationService';
 import { detectDuplicate } from '../services/dataIntegrityService';
 
 const CreateQuotation = () => {
@@ -70,6 +70,31 @@ const CreateQuotation = () => {
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+
+  const handleSaveDraftToDB = async () => {
+    // We want to force save to local state first just in case
+    forceSaveDraft();
+    
+    let draftData = { ...formData, status: 'draft', updatedAt: new Date().toISOString() };
+    
+    // Assign a ref number if it doesn't have one so it looks good in history
+    if (!draftData.quotationRefNo) {
+      draftData.quotationRefNo = generateNextReferenceNumber();
+      setFormData(draftData);
+    }
+    
+    // Save to actual IndexedDB so it appears in Dashboard and History
+    await saveQuotation(draftData);
+    
+    // If we're not in edit mode (meaning we are creating a new one), we should clear the WIP draft 
+    // because it has now been promoted to a real database draft.
+    if (!isEditMode) {
+      localStorage.removeItem(wipKey);
+    }
+    
+    window.alert("Draft saved successfully to your archive!");
+    navigate('/history');
   };
 
   const handleReset = () => {
@@ -335,7 +360,7 @@ const CreateQuotation = () => {
             <Button variant="outline" onClick={handleReset} style={{ flex: 1, backgroundColor: 'white' }}>
               <RotateCcw size={16} /> {isEditMode ? 'Discard Edits' : 'Clear Form'}
             </Button>
-            <Button variant="outline" onClick={forceSaveDraft} style={{ flex: 1, backgroundColor: 'white' }}>
+            <Button variant="outline" onClick={handleSaveDraftToDB} style={{ flex: 1, backgroundColor: 'white' }}>
               <Save size={16} /> Save Draft
             </Button>
           </div>
