@@ -1,0 +1,44 @@
+{
+  "id": "e4b8f5a2-9c1d-48e3-b3c1-7d9a1f2b4c5d",
+  "quotationRefNo": "QTN-001",
+  "status": "finalized",
+  "createdAt": "2024-10-27T09:00:00Z",
+  "updatedAt": "2024-10-27T09:15:30Z",
+  "customerDetails": {
+    "customerName": "Ramesh Kumar",
+    "companyName": "BuildTech Constructions Pvt Ltd",
+    "mobileNo": "+91 98765 43210",
+    "gstPan": "33AAACA1234A1Z5"
+  },
+  "jobDetails": {
+    "equipmentType": "JCB 3DX Backhoe Loader",
+    "rentalBasis": "Per Day",
+    "workLocation": "Saravanampatti, Coimbatore",
+    "requiredDate": "2024-11-01T00:00:00Z"
+  },
+  "pricingBreakdown": {
+    "hireCharges": 8500.00,
+    "driverCharges": 1000.00,
+    "fuelCharges": 0.00,
+    "transportCharges": 2500.00,
+    "otherCharges": 0.00,
+    "gstPercentage": 18,
+    "gstAmount": 2160.00,
+    "subTotal": 12000.00,
+    "grandTotal": 14160.00
+  },
+  "termsAndConditions": {
+    "keyTerms": [
+      "Rate is subject to vehicle availability and work-site conditions.",
+      "GST will be charged extra as applicable.",
+      "Working hours, fuel, and driver charges are as agreed for each vehicle.",
+      "This quotation is valid for 5 days from the date of issue.",
+      "Interest at 18% will be charged if payment is not made within 30 days from the date of the bill."
+    ]
+  },
+  "brandingMetadata": {
+    "companyName": "AMMAN EARTH MOVERS",
+    "logoUrl": "/assets/amman-logo.png",
+    "contactInfo": "60-A, NGR Street, Kalapatti, Coimbatore - 641 048 | 9842267585"
+  }
+}

@@ -1,0 +1,278 @@
+:root {
+  /* =========================================
+     COLOR PALETTE (Based on Amman Earth Movers Logo)
+     ========================================= */
+  /* Primary Brand Colors */
+  --color-orange-500: #F39200; /* Core Brand Orange Accent */
+  --color-orange-600: #DE8500; /* Hover State for Orange */
+  --color-orange-100: #FEF4E6; /* Light Orange Background for active states */
+  
+  --color-grey-500: #6D6E71;   /* Core Brand Grey */
+  --color-grey-600: #555658;   /* Darker Grey for hover/focus */
+  --color-grey-800: #333333;   /* High Contrast Text */
+  --color-grey-300: #D1D5DB;   /* Input Borders / Inactive Elements */
+  --color-grey-100: #F3F4F6;   /* Subtle Backgrounds (e.g., Footer) */
+  --color-grey-50:  #F9FAFB;   /* Main App Background (Off-white) */
+  
+  --color-white: #FFFFFF;
+  --color-error: #EF4444;
+  --color-error-bg: #FEF2F2;
+
+  /* Semantic Mappings */
+  --bg-app: var(--color-grey-50);
+  --bg-surface: var(--color-white);
+  --text-primary: var(--color-grey-800);
+  --text-secondary: var(--color-grey-500);
+  --text-inverse: var(--color-white);
+  --border-default: var(--color-grey-300);
+  --border-focus: var(--color-orange-500);
+
+  /* =========================================
+     TYPOGRAPHY
+     ========================================= */
+  --font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-md: 1rem;      /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px */
+  --font-size-xl: 1.25rem;   /* 20px */
+  --font-size-2xl: 1.5rem;   /* 24px */
+  
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+  --font-weight-extrabold: 700;
+
+  /* =========================================
+     SPACING (8px Grid System)
+     ========================================= */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+
+  /* =========================================
+     SHADOWS & RADII
+     ========================================= */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-focus: 0 0 0 3px rgba(243, 146, 0, 0.2); /* Orange glow */
+  
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+/* =========================================
+   GLOBAL RESET & BASE
+   ========================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px; /* Base size for rem scaling */
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  word-break: break-word; /* Prevents overflow from long unspaced strings on mobile */
+}
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================================
+   MOBILE-FIRST LAYOUT
+   ========================================= */
+.app-container {
+  max-width: 768px; /* Tablet/Mobile focus limit */
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-app);
+  box-shadow: var(--shadow-sm);
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--space-6) var(--space-4); /* 24px top/bottom, 16px sides */
+  overflow-y: auto;
+}
+
+/* =========================================
+   TYPOGRAPHY STYLES
+   ========================================= */
+h1, .text-h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+}
+
+h2, .text-h2 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-grey-500);
+  margin-bottom: var(--space-3);
+}
+
+/* =========================================
+   COMPONENTS: CARDS & CONTAINERS
+   ========================================= */
+.card {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-default);
+  margin-bottom: var(--space-4);
+}
+
+/* =========================================
+   COMPONENTS: BUTTONS
+   ========================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: none;
+  outline: none;
+}
+
+.btn:focus-visible {
+  box-shadow: var(--shadow-focus);
+}
+
+.btn-primary {
+  background-color: var(--color-orange-500);
+  color: var(--text-inverse);
+  box-shadow: 0 1px 3px rgba(243, 146, 0, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-orange-600);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-grey-100);
+  border-color: var(--color-grey-500);
+}
+
+.btn-text {
+  background-color: transparent;
+  color: var(--color-grey-500);
+  padding: var(--space-2);
+}
+
+.btn-text:hover {
+  color: var(--color-grey-800);
+}
+
+/* =========================================
+   COMPONENTS: FORMS & INPUTS
+   ========================================= */
+.form-group {
+  margin-bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.form-label {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--space-3);
+  font-size: var(--font-size-md); /* 16px is required to prevent iOS zoom */
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  font-family: var(--font-family-base);
+}
+
+.form-input::placeholder {
+  color: var(--color-grey-300);
+}
+
+.form-input:hover {
+  border-color: var(--color-grey-500);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-focus); /* Orange glow on focus */
+}
+
+.form-input.error {
+  border-color: var(--color-error);
+}
+
+.form-input.error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.error-text {
+  color: var(--color-error);
+  font-size: var(--font-size-xs);
+  margin-top: var(--space-1);
+}
+
+.nav-active {
+  color: var(--color-orange-500) !important;
+}
+
+/* =========================================
+   PRINT STYLES
+   ========================================= */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body, .app-container {
+    background-color: white !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+}
