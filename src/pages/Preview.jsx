@@ -218,35 +218,62 @@ const Preview = () => {
         </div>
       )}
 
-      {/* Workspace Header */}
-      <div className="flex items-center justify-between mb-6 no-print" style={{ maxWidth: '210mm', margin: '0 auto 24px auto' }}>
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} style={{ background: 'white', border: '1px solid var(--border-default)', borderRadius: '50%', padding: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-sm)' }}>
-            <span style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-secondary)' }}>&larr;</span>
-          </button>
-          <div>
-            <h1 className="text-h1" style={{ margin: 0, fontSize: 'var(--font-size-xl)' }}>Document Workspace</h1>
-            <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)' }}>
-              {data.status === 'draft' ? 'Reviewing Draft' : 'Viewing Finalized Record'}
-            </p>
+      {/* Workspace Header - Mobile Optimized */}
+      <div className="flex-col gap-4 no-print" style={{ maxWidth: '794px', margin: '0 auto 24px auto', width: '100%' }}>
+        
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate(-1)} style={{ background: 'white', border: '1px solid var(--border-default)', borderRadius: '50%', padding: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-sm)' }}>
+              <span style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-secondary)' }}>&larr;</span>
+            </button>
+            <div>
+              <h1 className="text-h1" style={{ margin: 0, fontSize: 'var(--font-size-lg)' }}>Document Preview</h1>
+              <div className="flex items-center gap-2" style={{ marginTop: '2px' }}>
+                <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-secondary)', fontWeight: 'var(--font-weight-bold)' }}>{data.quotationRefNo || 'WIP Draft'}</span>
+                <span style={{ 
+                  fontSize: '10px', padding: '2px 8px', borderRadius: '12px', textTransform: 'uppercase', fontWeight: 'bold',
+                  backgroundColor: data.status === 'finalized' ? '#DCFCE7' : data.status === 'archived' ? '#F3F4F6' : '#FEF3C7',
+                  color: data.status === 'finalized' ? '#166534' : data.status === 'archived' ? '#4B5563' : '#92400E'
+                }}>
+                  {data.status}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-        
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={handleEdit} style={{ backgroundColor: 'white', padding: '8px 12px' }}>
-            <Edit2 size={16} style={{ marginRight: '6px' }} /> Edit
+
+        {/* Compact Responsive Action Buttons */}
+        <div className="flex gap-2" style={{ overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <style>{`.flex.gap-2::-webkit-scrollbar { display: none; }`}</style>
+          
+          <Button variant="outline" onClick={handleEdit} style={{ backgroundColor: 'white', padding: '8px 16px', borderRadius: '20px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+            <Edit2 size={14} style={{ marginRight: '6px' }} /> Edit
           </Button>
+          
+          <Button variant="outline" onClick={handleDownload} disabled={isExporting} style={{ backgroundColor: 'white', padding: '8px 16px', borderRadius: '20px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+            {isExporting ? <RefreshCw size={14} className="spin" style={{marginRight:'6px'}}/> : <Download size={14} style={{ marginRight: '6px' }} />} Download
+          </Button>
+          
+          <Button variant="outline" onClick={handlePrint} disabled={isExporting} style={{ backgroundColor: 'white', padding: '8px 16px', borderRadius: '20px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+            <Printer size={14} style={{ marginRight: '6px' }} /> Print
+          </Button>
+          
+          <Button variant="outline" onClick={handleShare} disabled={isExporting} style={{ backgroundColor: 'white', padding: '8px 16px', borderRadius: '20px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+            <Share2 size={14} style={{ marginRight: '6px' }} /> Share
+          </Button>
+
           {id !== 'draft' && (
             <>
-              <Button variant="outline" onClick={handleClone} style={{ backgroundColor: 'white', padding: '8px 12px' }} className="hidden sm:flex">
-                <Copy size={16} style={{ marginRight: '6px' }} /> Clone
+              <Button variant="outline" onClick={handleClone} style={{ backgroundColor: 'white', padding: '8px 16px', borderRadius: '20px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                <Copy size={14} style={{ marginRight: '6px' }} /> Clone
               </Button>
-              <Button variant="outline" onClick={handleArchive} style={{ backgroundColor: 'white', padding: '8px 12px' }} className="hidden sm:flex">
-                <Archive size={16} style={{ marginRight: '6px' }} /> Archive
+              <Button variant="outline" onClick={handleArchive} style={{ backgroundColor: 'white', padding: '8px 16px', borderRadius: '20px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                <Archive size={14} style={{ marginRight: '6px' }} /> Archive
               </Button>
             </>
           )}
         </div>
+        
       </div>
 
       {/* A4 Document Container - Target for PDF Engine */}
@@ -272,7 +299,10 @@ const Preview = () => {
               minHeight: '1123px', // Absolute height for A4 aspect ratio
               boxSizing: 'border-box',
               boxShadow: 'var(--shadow-lg)',
-              borderRadius: 'var(--radius-sm)'
+              borderRadius: 'var(--radius-sm)',
+              WebkitTextSizeAdjust: 'none', // CRITICAL: Stop iPhone Safari from enlarging fonts randomly
+              textSizeAdjust: 'none',       // CRITICAL: Stop mobile font inflation bugs in canvas
+              margin: '0 auto'
             }}>
             
           {/* Header */}
@@ -419,38 +449,21 @@ const Preview = () => {
         </div>
       </div>
       
-      {/* Sticky Bottom Premium Action Area */}
-      <div className="no-print" style={{ 
-        position: 'fixed', bottom: 0, left: 0, right: 0, 
-        padding: '16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
-        backgroundColor: 'var(--bg-surface)', borderTop: '1px solid var(--border-default)', 
-        boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.08)', zIndex: 90 
-      }}>
-        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          
-          {data.status === 'draft' && (
+      {/* Sticky Bottom Premium Action Area - ONLY for Drafts */}
+      {data.status === 'draft' && (
+        <div className="no-print" style={{ 
+          position: 'fixed', bottom: 0, left: 0, right: 0, 
+          padding: '16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
+          backgroundColor: 'var(--bg-surface)', borderTop: '1px solid var(--border-default)', 
+          boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.08)', zIndex: 90 
+        }}>
+          <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <Button variant="primary" className="w-full" onClick={handleFinalize} style={{ padding: '12px', fontSize: 'var(--font-size-md)', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.4)' }}>
               Confirm & Save Final Quotation
             </Button>
-          )}
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '8px' }}>
-            <Button variant="outline" onClick={handleShare} disabled={isExporting} style={{ padding: '12px', backgroundColor: 'white' }}>
-              <Share2 size={16} style={{marginRight:'8px'}}/> Share
-            </Button>
-            <Button variant="outline" onClick={handlePrint} disabled={isExporting} style={{ padding: '12px', backgroundColor: 'white' }}>
-              <Printer size={16} style={{marginRight:'8px'}}/> Print
-            </Button>
-            <Button variant="outline" onClick={handleOpenNewTab} disabled={isExporting} style={{ padding: '12px', backgroundColor: 'white' }} className="hidden sm:flex">
-              <ExternalLink size={16} style={{marginRight:'8px'}}/> Open
-            </Button>
-            <Button variant="outline" onClick={handleDownload} disabled={isExporting} style={{ padding: '12px', backgroundColor: 'white', color: 'var(--text-primary)', border: '1px solid var(--border-default)', gridColumn: '1 / -1', '@media (min-width: 640px)': { gridColumn: 'auto' } }}>
-              {isExporting ? <RefreshCw size={16} className="spin" style={{marginRight:'8px'}}/> : <Download size={16} style={{marginRight:'8px'}}/>}
-              {isExporting ? 'Generating PDF...' : 'Download PDF Document'}
-            </Button>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
