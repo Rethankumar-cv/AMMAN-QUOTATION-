@@ -195,6 +195,7 @@ h3, .text-h3 {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
+  min-height: 48px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid transparent;
   outline: none;
@@ -281,6 +282,7 @@ h3, .text-h3 {
   color: var(--text-primary);
   background-color: var(--bg-input);
   border: 1px solid var(--border-default);
+  min-height: 52px;
   border-radius: var(--radius-md);
   transition: all 0.2s ease;
   font-family: var(--font-family-base);

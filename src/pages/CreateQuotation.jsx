@@ -360,9 +360,6 @@ const CreateQuotation = () => {
             <Button variant="outline" onClick={handleReset} style={{ flex: 1, backgroundColor: 'white' }}>
               <RotateCcw size={16} /> {isEditMode ? 'Discard Edits' : 'Clear Form'}
             </Button>
-            <Button variant="outline" onClick={handleSaveDraftToDB} style={{ flex: 1, backgroundColor: 'white' }}>
-              <Save size={16} /> Save Draft
-            </Button>
           </div>
         )}
       </div>
@@ -370,27 +367,35 @@ const CreateQuotation = () => {
       {/* Sticky Bottom Premium Action Area */}
       <div style={{ 
         position: 'fixed', bottom: 0, left: 0, right: 0, 
-        padding: '16px 24px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
+        padding: '16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
         backgroundColor: 'var(--bg-surface)', borderTop: '1px solid var(--border-default)', 
         boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.08)', zIndex: 90, 
       }}>
-        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', gap: '24px', alignItems: 'center' }}>
+        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', gap: '12px', alignItems: 'center' }}>
+          
           <div style={{ flex: 1, display: 'none' }} className="sm:block">
             <span style={{ display: 'block', fontSize: 'var(--font-size-xs)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Total Estimate</span>
             <span style={{ fontSize: 'var(--font-size-xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-primary)' }}>₹ {formData.pricingBreakdown.grandTotal.toLocaleString('en-IN')}</span>
           </div>
           
-          <div style={{ flex: 2 }}>
+          <div style={{ flex: 1, display: 'flex', gap: '12px' }}>
+            {!isFinalized && (
+              <Button variant="outline" className="w-full" onClick={handleSaveDraftToDB} style={{ flex: 1, padding: '14px', backgroundColor: 'white', color: 'var(--text-primary)' }}>
+                <Save size={18} className="hidden sm:inline" style={{ marginRight: '4px' }} /> Save
+              </Button>
+            )}
+            
             {isFinalized ? (
-              <Button variant="primary" className="w-full" onClick={() => navigate(`/preview/${id}`)} style={{ padding: '14px' }}>
-                Open Document Viewer <ArrowRight size={18} style={{ marginLeft: '4px' }} />
+              <Button variant="primary" className="w-full" onClick={() => navigate(`/preview/${id}`)} style={{ flex: 2, padding: '14px' }}>
+                Open Viewer <ArrowRight size={18} style={{ marginLeft: '4px' }} />
               </Button>
             ) : (
-              <Button variant="primary" className="w-full" onClick={handleReview} style={{ padding: '14px', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.4)' }}>
-                Review & Generate PDF <ArrowRight size={18} style={{ marginLeft: '4px' }} />
+              <Button variant="primary" className="w-full" onClick={handleReview} style={{ flex: 2, padding: '14px', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.4)' }}>
+                Preview <ArrowRight size={18} style={{ marginLeft: '4px' }} />
               </Button>
             )}
           </div>
+          
         </div>
       </div>
 

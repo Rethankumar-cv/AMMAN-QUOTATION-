@@ -18,8 +18,23 @@ const Preview = () => {
   const [loading, setLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [notification, setNotification] = useState(null);
+  const [scale, setScale] = useState(1);
   
   const printRef = useRef(null);
+
+  useEffect(() => {
+    const updateScale = () => {
+      const padding = 32;
+      if (window.innerWidth < 794 + padding) {
+        setScale((window.innerWidth - padding) / 794);
+      } else {
+        setScale(1);
+      }
+    };
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, []);
 
   useEffect(() => {
     const fetchQuote = async () => {
@@ -235,22 +250,30 @@ const Preview = () => {
       </div>
 
       {/* A4 Document Container - Target for PDF Engine */}
-      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '32px', display: 'flex', justifyContent: 'center' }} className="no-print preview-container">
-        <div 
-          ref={printRef}
-          style={{ 
-            backgroundColor: 'white', 
-            padding: '40px', 
-            color: '#333',
-            fontFamily: 'Arial, sans-serif',
-            fontSize: '12px',
-            lineHeight: '1.4',
-            width: '210mm',
-            minHeight: '297mm',
-            boxSizing: 'border-box',
-            boxShadow: 'var(--shadow-lg)',
-            borderRadius: 'var(--radius-sm)'
-          }}>
+      <div style={{ paddingBottom: '32px', display: 'flex', justifyContent: 'center' }} className="no-print preview-container">
+        <div style={{ 
+          transform: `scale(${scale})`, 
+          transformOrigin: 'top center',
+          width: '794px',
+          transition: 'transform 0.2s ease-in-out',
+          height: scale < 1 ? `calc(1123px * ${scale})` : 'auto',
+          marginBottom: scale < 1 ? '0' : '40px'
+        }}>
+          <div 
+            ref={printRef}
+            style={{ 
+              backgroundColor: 'white', 
+              padding: '40px', 
+              color: '#333',
+              fontFamily: 'Arial, sans-serif',
+              fontSize: '12px',
+              lineHeight: '1.4',
+              width: '794px', // Absolute strict desktop width for perfect mobile rendering
+              minHeight: '1123px', // Absolute height for A4 aspect ratio
+              boxSizing: 'border-box',
+              boxShadow: 'var(--shadow-lg)',
+              borderRadius: 'var(--radius-sm)'
+            }}>
             
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', alignItems: 'flex-start' }}>
@@ -392,45 +415,40 @@ const Preview = () => {
             </tbody>
           </table>
 
+          </div>
         </div>
       </div>
       
       {/* Sticky Bottom Premium Action Area */}
       <div className="no-print" style={{ 
         position: 'fixed', bottom: 0, left: 0, right: 0, 
-        padding: '16px 24px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
+        padding: '16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
         backgroundColor: 'var(--bg-surface)', borderTop: '1px solid var(--border-default)', 
         boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.08)', zIndex: 90 
       }}>
-        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           
           {data.status === 'draft' && (
-            <Button variant="primary" className="w-full" onClick={handleFinalize} style={{ padding: '16px', fontSize: 'var(--font-size-md)', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.4)' }}>
+            <Button variant="primary" className="w-full" onClick={handleFinalize} style={{ padding: '12px', fontSize: 'var(--font-size-md)', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.4)' }}>
               Confirm & Save Final Quotation
             </Button>
           )}
           
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', gap: '12px', flex: 1, minWidth: '200px' }}>
-              <Button variant="outline" onClick={handleShare} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }}>
-                <Share2 size={18} style={{marginRight:'8px'}}/> Share
-              </Button>
-              <Button variant="outline" onClick={handlePrint} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }}>
-                <Printer size={18} style={{marginRight:'8px'}}/> Print
-              </Button>
-              <Button variant="outline" onClick={handleOpenNewTab} disabled={isExporting} style={{ flex: 1, padding: '12px', backgroundColor: 'white' }} className="hidden sm:flex">
-                <ExternalLink size={18} style={{marginRight:'8px'}}/> Open
-              </Button>
-            </div>
-            
-            <div style={{ flex: 1, minWidth: '200px' }}>
-              <Button variant="outline" className="w-full" onClick={handleDownload} disabled={isExporting} style={{ padding: '12px', height: '100%', backgroundColor: 'white', color: 'var(--text-primary)', border: '1px solid var(--border-default)' }}>
-                {isExporting ? <RefreshCw size={18} className="spin" style={{marginRight:'8px'}}/> : <Download size={18} style={{marginRight:'8px'}}/>}
-                {isExporting ? 'Generating PDF...' : 'Download PDF Document'}
-              </Button>
-            </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '8px' }}>
+            <Button variant="outline" onClick={handleShare} disabled={isExporting} style={{ padding: '12px', backgroundColor: 'white' }}>
+              <Share2 size={16} style={{marginRight:'8px'}}/> Share
+            </Button>
+            <Button variant="outline" onClick={handlePrint} disabled={isExporting} style={{ padding: '12px', backgroundColor: 'white' }}>
+              <Printer size={16} style={{marginRight:'8px'}}/> Print
+            </Button>
+            <Button variant="outline" onClick={handleOpenNewTab} disabled={isExporting} style={{ padding: '12px', backgroundColor: 'white' }} className="hidden sm:flex">
+              <ExternalLink size={16} style={{marginRight:'8px'}}/> Open
+            </Button>
+            <Button variant="outline" onClick={handleDownload} disabled={isExporting} style={{ padding: '12px', backgroundColor: 'white', color: 'var(--text-primary)', border: '1px solid var(--border-default)', gridColumn: '1 / -1', '@media (min-width: 640px)': { gridColumn: 'auto' } }}>
+              {isExporting ? <RefreshCw size={16} className="spin" style={{marginRight:'8px'}}/> : <Download size={16} style={{marginRight:'8px'}}/>}
+              {isExporting ? 'Generating PDF...' : 'Download PDF Document'}
+            </Button>
           </div>
-
         </div>
       </div>
     </div>

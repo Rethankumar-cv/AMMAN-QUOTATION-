@@ -18,7 +18,17 @@ export const generateQuotationPDF = async (elementRef) => {
     scale: 2, 
     useCORS: true,
     logging: false,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    windowWidth: 794,
+    width: 794,
+    onclone: (document, element) => {
+      // Ensure the cloned element removes any CSS scaling that was applied for mobile preview
+      element.style.transform = 'none';
+      element.style.width = '794px';
+      // Force all descendant tables and blocks to respect the rigid width
+      const tables = element.querySelectorAll('table');
+      tables.forEach(t => t.style.width = '100%');
+    }
   });
 
   const imgData = canvas.toDataURL('image/jpeg', 1.0);

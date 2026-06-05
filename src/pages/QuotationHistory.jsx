@@ -66,7 +66,8 @@ const QuotationHistory = () => {
             <div className="grid-cols-2">
               <div className="flex-col gap-2">
                 <label style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-secondary)', letterSpacing: '0.5px' }}>FILTER BY STATUS</label>
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex gap-2" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '4px', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                  <style>{`.flex.gap-2::-webkit-scrollbar { display: none; }`}</style>
                   {['all', 'draft', 'finalized', 'archived'].map(status => (
                     <button 
                       key={status}
@@ -76,7 +77,9 @@ const QuotationHistory = () => {
                         backgroundColor: filterStatus === status ? 'var(--color-orange-500)' : 'transparent',
                         color: filterStatus === status ? 'white' : 'var(--text-secondary)',
                         borderColor: filterStatus === status ? 'var(--color-orange-500)' : 'var(--border-default)',
-                        textTransform: 'capitalize'
+                        textTransform: 'capitalize',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0
                       }}
                     >
                       {status === 'all' ? 'Active Only' : status}
@@ -148,8 +151,8 @@ const QuotationHistory = () => {
             </div>
 
             {/* Action Bar */}
-            <div style={{ backgroundColor: 'var(--bg-app)', padding: '12px 20px', borderTop: '1px solid var(--border-default)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div className="flex gap-2">
+            <div style={{ backgroundColor: 'var(--bg-app)', padding: '12px 20px', borderTop: '1px solid var(--border-default)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+              <div className="flex gap-2" style={{ flexWrap: 'wrap' }}>
                 {q.status === 'draft' && (
                   <Button variant="outline" style={{ padding: '6px 12px', backgroundColor: 'white' }} onClick={() => openForEdit(q.id)}>
                     <Edit2 size={16} /> Edit
