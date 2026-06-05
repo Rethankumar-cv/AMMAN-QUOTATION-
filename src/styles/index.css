@@ -3,20 +3,20 @@
      COLOR PALETTE (Amman Earth Movers Brand)
      ========================================= */
   /* Primary Brand Colors */
-  --color-orange-500: #F39200; /* Core Brand Orange Accent */
-  --color-orange-600: #DE8500; /* Hover State for Orange */
-  --color-orange-100: #FEF4E6; /* Light Orange Background */
-  --color-orange-50:  #FFF9F0;
+  --color-orange-500: #F59E0B; /* Core Brand Orange Accent */
+  --color-orange-600: #D97706; /* Hover State for Orange */
+  --color-orange-100: #FEF3C7; /* Light Orange Background */
+  --color-orange-50:  #FFFBEB;
   
-  --color-grey-900: #1A1A1A;   /* Pure Dark */
-  --color-grey-800: #333333;   /* High Contrast Text */
-  --color-grey-600: #555658;   /* Secondary Text */
-  --color-grey-500: #6D6E71;   /* Core Brand Grey */
+  --color-grey-900: #111827;   /* Pure Dark */
+  --color-grey-800: #1F2937;   /* High Contrast Text */
+  --color-grey-600: #4B5563;   /* Secondary Text */
+  --color-grey-500: #6B7280;   /* Core Brand Grey */
   --color-grey-400: #9CA3AF;
   --color-grey-300: #D1D5DB;   /* Input Borders */
   --color-grey-200: #E5E7EB;   /* Dividers */
   --color-grey-100: #F3F4F6;   /* Input Backgrounds */
-  --color-grey-50:  #F9FAFB;   /* App Background */
+  --color-grey-50:  #F8FAFC;   /* App Background */
   
   --color-white: #FFFFFF;
   --color-error: #EF4444;
@@ -26,9 +26,9 @@
   /* Semantic Mappings */
   --bg-app: var(--color-grey-50);
   --bg-surface: var(--color-white);
-  --bg-input: var(--color-grey-50);
+  --bg-input: var(--color-white);
   --text-primary: var(--color-grey-900);
-  --text-secondary: var(--color-grey-600);
+  --text-secondary: var(--color-grey-500);
   --text-inverse: var(--color-white);
   --border-default: var(--color-grey-200);
   --border-focus: var(--color-orange-500);
@@ -67,13 +67,13 @@
      ========================================= */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-  --shadow-focus: 0 0 0 3px rgba(243, 146, 0, 0.15); /* Soft Orange glow */
+  --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-focus: 0 0 0 3px rgba(245, 158, 11, 0.2); 
   
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
 }
 
 /* =========================================
@@ -108,13 +108,13 @@ body {
    MOBILE-FIRST LAYOUT
    ========================================= */
 .app-container {
-  max-width: 1024px; /* Increased for desktop app feel */
+  max-width: 1400px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: var(--bg-app);
-  box-shadow: var(--shadow-xl);
+  position: relative;
 }
 
 .main-content {
@@ -159,16 +159,17 @@ h3, .text-h3 {
    ========================================= */
 .card {
   background-color: var(--bg-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-default);
   margin-bottom: var(--space-4);
-  transition: box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
 }
 
 .card-header {
@@ -190,12 +191,12 @@ h3, .text-h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.625rem 1.25rem;
-  border-radius: var(--radius-md);
+  padding: 0 1.25rem;
+  border-radius: 12px;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  min-height: 48px;
+  height: 48px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid transparent;
   outline: none;
@@ -235,13 +236,13 @@ h3, .text-h3 {
 }
 
 .btn-danger {
-  background-color: var(--color-error-bg);
+  background-color: transparent;
   color: var(--color-error);
-  border-color: transparent;
+  border-color: var(--color-error);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: #FEE2E2;
+  background-color: var(--color-error-bg);
 }
 
 .btn-text {
@@ -270,9 +271,11 @@ h3, .text-h3 {
 }
 
 .form-label {
-  font-size: var(--font-size-sm);
+  font-size: 13px;
   color: var(--text-secondary);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-input {
@@ -352,6 +355,137 @@ h3, .text-h3 {
 .gap-3 { gap: var(--space-3); }
 .gap-4 { gap: var(--space-4); }
 
+.hidden { display: none; }
+@media (min-width: 640px) {
+  .sm\:inline { display: inline; }
+  .sm\:block { display: block; }
+  .sm\:flex { display: flex; }
+}
+
+/* =========================================
+   DASHBOARD & LAYOUT
+   ========================================= */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* =========================================
+   BOTTOM NAVIGATION
+   ========================================= */
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  text-decoration: none;
+  flex: 1;
+  height: 100%;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 4px;
+  position: relative;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-icon {
+  transition: all 0.2s ease;
+}
+
+.nav-indicator {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-orange-500);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0;
+}
+
+.nav-active {
+  color: var(--color-orange-500);
+}
+
+.nav-active .nav-icon {
+  transform: translateY(-2px);
+  color: var(--color-orange-500);
+}
+
+.nav-active .nav-label {
+  font-weight: 700;
+}
+
+.nav-active .nav-indicator {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+  bottom: 6px;
+}
+
+/* =========================================
+   ACTION BAR
+   ========================================= */
+.action-bar-glass {
+  position: fixed;
+  bottom: 68px; /* Above BottomNav */
+  left: 0;
+  right: 0;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  background-color: rgba(255,255,255,0.85);
+  border-top: 1px solid var(--border-default);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 90;
+}
+
+/* =========================================
+   FAB (Floating Action Button)
+   ========================================= */
+.fab {
+  position: fixed;
+  bottom: 84px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-orange-500), #EA580C);
+  color: white;
+  border: none;
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 90;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fab:hover {
+  transform: scale(1.08) translateY(-4px);
+  box-shadow: 0 12px 28px rgba(234, 88, 12, 0.45);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
 /* =========================================
    PRINT STYLES
    ========================================= */
@@ -367,4 +501,9 @@ h3, .text-h3 {
     min-height: auto !important;
     max-width: 100% !important;
   }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

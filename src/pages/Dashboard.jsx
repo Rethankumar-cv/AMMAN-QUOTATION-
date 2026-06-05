@@ -44,48 +44,79 @@ const Dashboard = () => {
     <div className="flex-col gap-6" style={{ paddingBottom: '80px' }}>
       
       {/* Hero Welcome */}
-      <div style={{ padding: '8px 0 16px 0' }}>
-        <h1 className="text-h1" style={{ marginBottom: '8px' }}>Welcome back.</h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-md)' }}>
-          Here is what's happening at {profile.companyName} today.
-        </p>
+      <div style={{ padding: '8px 0 24px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 'bold', marginBottom: '8px' }}>
+            Today's Overview
+          </p>
+          <h1 className="text-h1" style={{ margin: 0, fontSize: '28px' }}>Welcome Back, {profile.companyName}</h1>
+        </div>
       </div>
       
       {/* Premium Metric Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px' }}>
-        <Card style={{ padding: '20px', display: 'flex', flexDirection: 'column', borderTop: '3px solid var(--color-grey-300)' }}>
-          <div className="flex items-center gap-2" style={{ marginBottom: '12px' }}>
-            <FileText size={16} color="var(--color-grey-500)" />
-            <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 'var(--font-weight-semibold)' }}>Total Quotes</span>
+      <div className="dashboard-grid">
+        <Card style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '13px', fontWeight: 'bold', textTransform: 'uppercase' }}>Total Quotes</span>
+            <div style={{ backgroundColor: 'var(--bg-app)', padding: '8px', borderRadius: '10px' }}>
+              <FileText size={18} color="var(--color-grey-500)" />
+            </div>
           </div>
-          <span style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-primary)' }}>{totalCount}</span>
+          <div>
+            <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--text-primary)', lineHeight: 1 }}>{totalCount}</div>
+            <div style={{ fontSize: '12px', color: 'var(--color-success)', fontWeight: 'bold', marginTop: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+               ↑ +12% this month
+            </div>
+          </div>
         </Card>
         
-        <Card style={{ padding: '20px', display: 'flex', flexDirection: 'column', borderTop: '3px solid var(--color-orange-400)' }}>
-          <div className="flex items-center gap-2" style={{ marginBottom: '12px' }}>
-            <Clock size={16} color="var(--color-orange-500)" />
-            <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 'var(--font-weight-semibold)' }}>Drafts</span>
+        <Card style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '13px', fontWeight: 'bold', textTransform: 'uppercase' }}>Drafts</span>
+            <div style={{ backgroundColor: 'var(--color-orange-50)', padding: '8px', borderRadius: '10px' }}>
+              <Clock size={18} color="var(--color-orange-500)" />
+            </div>
           </div>
-          <span style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-primary)' }}>{draftCount}</span>
+          <div>
+            <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--text-primary)', lineHeight: 1 }}>{draftCount}</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500', marginTop: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+               Awaiting finalization
+            </div>
+          </div>
         </Card>
 
-        <Card style={{ padding: '20px', display: 'flex', flexDirection: 'column', borderTop: '3px solid var(--color-success)' }}>
-          <div className="flex items-center gap-2" style={{ marginBottom: '12px' }}>
-            <CheckCircle size={16} color="var(--color-success)" />
-            <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 'var(--font-weight-semibold)' }}>Finalized</span>
+        <Card style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '13px', fontWeight: 'bold', textTransform: 'uppercase' }}>Finalized</span>
+            <div style={{ backgroundColor: '#ECFDF5', padding: '8px', borderRadius: '10px' }}>
+              <CheckCircle size={18} color="var(--color-success)" />
+            </div>
           </div>
-          <span style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-primary)' }}>{finalizedCount}</span>
+          <div>
+            <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--text-primary)', lineHeight: 1 }}>{finalizedCount}</div>
+            <div style={{ fontSize: '12px', color: 'var(--color-success)', fontWeight: 'bold', marginTop: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+               ↑ +5% this week
+            </div>
+          </div>
+        </Card>
+
+        <Card style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%', gap: '16px', backgroundColor: 'var(--color-grey-900)', color: 'white' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', fontWeight: 'bold', textTransform: 'uppercase' }}>Est. Finalized Value</span>
+            <div style={{ backgroundColor: 'rgba(255,255,255,0.1)', padding: '8px', borderRadius: '10px' }}>
+              <TrendingUp size={18} color="var(--color-orange-500)" />
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'white', lineHeight: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              ₹{revenueEstimate.toLocaleString('en-IN')}
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--color-success)', fontWeight: 'bold', marginTop: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+               ↑ Expected revenue
+            </div>
+          </div>
         </Card>
       </div>
-
-      {/* Revenue Card (Full width on small, part of grid on large) */}
-      <Card style={{ padding: '24px', backgroundColor: 'var(--color-grey-900)', color: 'white', border: 'none' }}>
-        <div className="flex items-center gap-2" style={{ marginBottom: '12px', opacity: 0.8 }}>
-          <TrendingUp size={16} color="var(--color-orange-500)" />
-          <span style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.5px' }}>Estimated Finalized Value</span>
-        </div>
-        <span style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)' }}>₹ {revenueEstimate.toLocaleString('en-IN')}</span>
-      </Card>
 
       {/* Quick Actions */}
       <div>
@@ -137,11 +168,17 @@ const Dashboard = () => {
         />
         
         {loading ? (
-          <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-secondary)' }}>Loading activity...</div>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '24px', height: '24px', border: '3px solid var(--color-grey-200)', borderTopColor: 'var(--color-orange-500)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+            Loading activity...
+          </div>
         ) : recentQuotes.length === 0 ? (
-          <Card style={{ padding: '32px', textAlign: 'center', color: 'var(--text-secondary)' }}>
-            <FileText size={32} style={{ margin: '0 auto 12px auto', opacity: 0.5 }} />
-            <p>No quotations generated yet.</p>
+          <Card style={{ padding: '48px 24px', textAlign: 'center', backgroundColor: 'var(--bg-app)', border: '1px dashed var(--border-default)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ backgroundColor: 'white', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px', boxShadow: 'var(--shadow-sm)' }}>
+              <FileText size={28} color="var(--color-grey-400)" />
+            </div>
+            <h3 className="text-h3" style={{ color: 'var(--text-primary)', marginBottom: '8px' }}>No Recent Activity</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '13px', maxWidth: '250px', margin: '0 auto' }}>Your latest finalized quotations will appear here.</p>
           </Card>
         ) : (
           <div className="flex-col gap-3">

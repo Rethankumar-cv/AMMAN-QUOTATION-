@@ -6,22 +6,27 @@ const Badge = ({ status, children, style = {} }) => {
   switch (status?.toLowerCase()) {
     case 'finalized':
       bgColor = '#ECFDF5';
-      color = '#059669';
+      color = '#10B981';
       border = '#A7F3D0';
       break;
     case 'draft':
-      bgColor = '#FEF4E6';
-      color = '#DE8500';
-      border = '#FDE68A';
+      bgColor = '#F3F4F6';
+      color = '#6B7280';
+      border = '#E5E7EB';
       break;
     case 'archived':
-      bgColor = '#F3F4F6';
-      color = '#4B5563';
-      border = '#E5E7EB';
+      bgColor = '#EFF6FF';
+      color = '#3B82F6';
+      border = '#BFDBFE';
+      break;
+    case 'cancelled':
+      bgColor = '#FEF2F2';
+      color = '#EF4444';
+      border = '#FECACA';
       break;
     default:
       bgColor = '#F3F4F6';
-      color = '#4B5563';
+      color = '#6B7280';
       border = '#E5E7EB';
   }
 

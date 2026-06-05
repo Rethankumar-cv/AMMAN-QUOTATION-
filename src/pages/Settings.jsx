@@ -18,7 +18,11 @@ const Settings = () => {
   const [appPrefs, setAppPrefs] = useState({});
 
   useEffect(() => {
-    setProfile(getSettings('companyProfile') || {});
+    const loadedProfile = getSettings('companyProfile') || {};
+    if (!loadedProfile.gstNumber) {
+      loadedProfile.gstNumber = '33AOMPC9735L1ZK';
+    }
+    setProfile(loadedProfile);
     setBranding(getSettings('branding') || {});
     setDefaults(getSettings('quotationDefaults') || {});
     setAppPrefs(getSettings('appPrefs') || {});

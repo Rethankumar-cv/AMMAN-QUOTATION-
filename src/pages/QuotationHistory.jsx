@@ -69,35 +69,35 @@ const QuotationHistory = () => {
         </Button>
       </div>
 
-      <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border-default)', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', gap: '8px', backgroundColor: 'var(--bg-surface)', padding: '6px', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-default)', marginBottom: '8px', width: 'fit-content' }}>
         <button 
           onClick={() => handleTabChange('quotations')}
-          style={{ padding: '8px 16px', background: 'none', border: 'none', borderBottom: isQuoteTab ? '2px solid var(--color-orange-500)' : '2px solid transparent', color: isQuoteTab ? 'var(--color-orange-600)' : 'var(--text-secondary)', fontWeight: isQuoteTab ? 'bold' : 'normal', cursor: 'pointer', fontSize: 'var(--font-size-md)' }}
+          style={{ padding: '8px 20px', background: isQuoteTab ? 'var(--color-orange-500)' : 'transparent', border: 'none', borderRadius: '14px', color: isQuoteTab ? 'white' : 'var(--text-secondary)', fontWeight: 'bold', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s ease', textTransform: 'uppercase' }}
         >
           Quotations
         </button>
         <button 
           onClick={() => handleTabChange('challans')}
-          style={{ padding: '8px 16px', background: 'none', border: 'none', borderBottom: !isQuoteTab ? '2px solid var(--color-orange-500)' : '2px solid transparent', color: !isQuoteTab ? 'var(--color-orange-600)' : 'var(--text-secondary)', fontWeight: !isQuoteTab ? 'bold' : 'normal', cursor: 'pointer', fontSize: 'var(--font-size-md)' }}
+          style={{ padding: '8px 20px', background: !isQuoteTab ? 'var(--color-orange-500)' : 'transparent', border: 'none', borderRadius: '14px', color: !isQuoteTab ? 'white' : 'var(--text-secondary)', fontWeight: 'bold', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s ease', textTransform: 'uppercase' }}
         >
           Delivery Challans
         </button>
       </div>
       
       {/* Advanced Search & Filter Bar */}
-      <Card style={{ padding: '16px', marginBottom: '0', backgroundColor: 'var(--bg-surface)' }}>
+      <Card style={{ padding: '12px', marginBottom: '16px', backgroundColor: 'var(--bg-surface)', borderRadius: 'var(--radius-xl)' }}>
         <div className="flex gap-3">
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-md)', padding: '10px 16px', backgroundColor: 'var(--bg-input)', transition: 'border-color 0.2s ease' }} className="search-container">
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', border: '1px solid var(--border-default)', borderRadius: '14px', padding: '0 16px', backgroundColor: 'var(--bg-app)', transition: 'border-color 0.2s ease, box-shadow 0.2s ease', height: '48px' }} className="search-container">
             <Search size={18} color="var(--color-grey-500)" style={{ marginRight: '12px', minWidth: '18px' }} />
             <input 
               type="text" 
               placeholder={isQuoteTab ? "Search quotes..." : "Search challans..."} 
               value={isQuoteTab ? searchQuery : challanQuery}
               onChange={(e) => isQuoteTab ? setSearchQuery(e.target.value) : setChallanQuery(e.target.value)}
-              style={{ border: 'none', outline: 'none', width: '100%', fontSize: 'var(--font-size-md)', color: 'var(--text-primary)', backgroundColor: 'transparent' }}
+              style={{ border: 'none', outline: 'none', width: '100%', fontSize: '15px', color: 'var(--text-primary)', backgroundColor: 'transparent', height: '100%' }}
             />
           </div>
-          <Button variant={showFilters ? 'primary' : 'outline'} onClick={() => setShowFilters(!showFilters)} style={{ padding: '0 16px', height: 'auto' }}>
+          <Button variant={showFilters ? 'primary' : 'outline'} onClick={() => setShowFilters(!showFilters)} style={{ padding: '0 16px', height: '48px', borderRadius: '14px', backgroundColor: showFilters ? 'var(--color-orange-500)' : 'var(--bg-app)' }}>
             <Filter size={20} />
           </Button>
         </div>
@@ -259,8 +259,8 @@ const QuotationHistory = () => {
       {/* Mobile FAB */}
       <button 
         onClick={() => navigate(isQuoteTab ? '/create' : '/create-challan')}
-        className="sm:hidden"
-        style={{ position: 'fixed', bottom: '80px', right: '20px', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'var(--color-orange-500)', color: 'white', border: 'none', boxShadow: '0 4px 16px rgba(243, 146, 0, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 90, cursor: 'pointer', transition: 'transform 0.2s' }}
+        className="sm:hidden fab"
+        title={`New ${isQuoteTab ? 'Quote' : 'Challan'}`}
       >
         <Plus size={24} />
       </button>

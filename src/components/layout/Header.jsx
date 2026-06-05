@@ -44,17 +44,16 @@ const Header = () => {
           </div>
         </Link>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           {isOffline && (
             <div style={offlineBadgeStyle} title="You are offline. Quotations will be saved locally.">
               <WifiOff size={14} />
               <span style={{ display: 'none' }} className="sm:inline">Offline</span>
             </div>
           )}
-          <div style={appTitleStyle}>
-            <FileText size={16} color="var(--color-orange-500)" />
-            <span style={{ display: 'none', marginLeft: '6px' }} className="sm:inline">Workspace</span>
-          </div>
+          <Link to="/create-quotation" style={actionButtonStyle}>
+            <FileText size={20} color="var(--color-orange-500)" />
+          </Link>
         </div>
       </div>
     </header>
@@ -103,28 +102,31 @@ const fallbackTextStyle = {
   lineHeight: '1.2'
 };
 
-const appTitleStyle = {
+const actionButtonStyle = {
   display: 'flex',
   alignItems: 'center',
-  fontSize: 'var(--font-size-sm)',
-  color: 'var(--text-secondary)',
-  fontWeight: 'var(--font-weight-medium)',
-  backgroundColor: 'var(--bg-app)',
-  padding: '6px 12px',
-  borderRadius: '20px',
-  border: '1px solid var(--border-default)'
+  justifyContent: 'center',
+  width: '44px',
+  height: '44px',
+  backgroundColor: 'var(--bg-surface)',
+  borderRadius: '50%',
+  border: '1px solid var(--border-default)',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+  textDecoration: 'none',
+  transition: 'all 0.2s ease',
+  cursor: 'pointer'
 };
 
 const offlineBadgeStyle = {
   display: 'flex',
   alignItems: 'center',
-  gap: '4px',
+  gap: '6px',
   backgroundColor: 'var(--color-error-bg)',
   color: 'var(--color-error)',
-  padding: '6px 10px',
+  padding: '6px 12px',
   borderRadius: '20px',
   fontSize: '12px',
-  fontWeight: 'var(--font-weight-semibold)',
+  fontWeight: 'var(--font-weight-bold)'
 };
 
 export default Header;

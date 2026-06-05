@@ -365,12 +365,7 @@ const CreateQuotation = () => {
       </div>
 
       {/* Sticky Bottom Premium Action Area */}
-      <div style={{ 
-        position: 'fixed', bottom: '64px', left: 0, right: 0, 
-        padding: '16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
-        backgroundColor: 'var(--bg-surface)', borderTop: '1px solid var(--border-default)', 
-        boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.08)', zIndex: 90, 
-      }}>
+      <div className="action-bar-glass">
         <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', gap: '12px', alignItems: 'center' }}>
           
           <div style={{ flex: 1, display: 'none' }} className="sm:block">

@@ -10,7 +10,7 @@ export const createEmptyChallan = () => ({
   vehicleNo: '',
   reason: 'Hiring',
   transactionType: 'Bill From - Dispatch From',
-  billFrom: { name: 'AMMAN EARTH MOVERS', gst: '', address: '60-A, NGR Street, Kalapatti, Coimbatore - 641 048', state: 'TAMILNADU' },
+  billFrom: { name: 'AMMAN EARTH MOVERS', gst: '33AOMPC9735L1ZK', address: '60-A, NGR Street, Kalapatti, Coimbatore - 641 048', state: 'TAMILNADU' },
   billTo: { name: '', gst: '', address: '', state: '' },
   dispatchFrom: { address1: '60-A, NGR Street, Kalapatti', address2: 'Coimbatore - 641 048', cityStatePin: 'TAMILNADU' },
   shipTo: { address1: '', address2: '', cityStatePin: '' },
