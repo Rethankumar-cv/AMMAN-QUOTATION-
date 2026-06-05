@@ -1,4 +1,5 @@
 import React from 'react';
+import SignatureBlock from './SignatureBlock';
 
 const QuotationTemplate = React.forwardRef(({ data, profile }, ref) => {
   const { formatted, customerDetails = {}, jobDetails = {}, pricingBreakdown = {}, brandingMetadata = {} } = data;
@@ -7,11 +8,11 @@ const QuotationTemplate = React.forwardRef(({ data, profile }, ref) => {
   const fmt = (val) => val && Number(val) !== 0 ? Number(val).toLocaleString('en-IN') : '0';
 
   return (
-    <div 
+    <div
       ref={ref}
-      style={{ 
-        backgroundColor: 'white', 
-        padding: '40px', 
+      style={{
+        backgroundColor: 'white',
+        padding: '40px',
         color: '#333',
         fontFamily: 'Arial, sans-serif',
         fontSize: '12px',
@@ -25,7 +26,7 @@ const QuotationTemplate = React.forwardRef(({ data, profile }, ref) => {
         boxShadow: 'none', // Remove shadow for PDF export
         borderRadius: '0'  // Remove border radius for PDF export
       }}>
-      
+
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', alignItems: 'flex-start' }}>
         <div>
@@ -48,11 +49,11 @@ const QuotationTemplate = React.forwardRef(({ data, profile }, ref) => {
 
       {/* Customer / To & Ref Area */}
       <div style={{ display: 'flex', border: '1px solid #CCC', marginBottom: '12px' }}>
-        <div style={{ flex: 1, padding: '8px' }}>
-          <strong>Customer / To:</strong> {customerDetails.customerName} {customerDetails.companyName ? ` / ${customerDetails.companyName}` : ''}
+        <div style={{ width: '50%', padding: '8px 12px', display: 'flex', alignItems: 'center' }}>
+          <div><strong>Customer / To:</strong> {customerDetails.customerName} {customerDetails.companyName ? ` / ${customerDetails.companyName}` : ''}</div>
         </div>
-        <div style={{ width: '250px', backgroundColor: '#F5F5F5', padding: '8px', borderLeft: '1px solid #CCC', textAlign: 'right' }}>
-          <p style={{ margin: '0 0 4px 0' }}><strong>Ref No:</strong> {data.quotationRefNo || '[Draft]'}</p>
+        <div style={{ width: '50%', backgroundColor: '#F5F5F5', padding: '8px 12px', borderLeft: '1px solid #CCC', textAlign: 'right', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <p style={{ margin: '0 0 2px 0' }}><strong>Ref No:</strong> {data.quotationRefNo || '[Draft]'}</p>
           <p style={{ margin: 0 }}><strong>Date:</strong> {formatted.displayDate}</p>
         </div>
       </div>
@@ -147,20 +148,12 @@ const QuotationTemplate = React.forwardRef(({ data, profile }, ref) => {
                 })}
               </ul>
             </td>
-            <td style={{ padding: '12px 8px', border: '1px solid #CCC', verticalAlign: 'bottom', textAlign: 'center', position: 'relative' }}>
-              <div style={{ height: '100px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', marginBottom: '8px' }}>
-                {brandingMetadata.stampUrl ? (
-                  <img src={brandingMetadata.stampUrl} alt="Stamp" style={{ position: 'absolute', height: '90px', opacity: 0.5, zIndex: 1 }} />
-                ) : (
-                  <span style={{ color: '#CCC' }}>Space for<br/>Company Seal / Stamp</span>
-                )}
-                {brandingMetadata.signatureUrl && (
-                  <img src={brandingMetadata.signatureUrl} alt="Signature" style={{ position: 'relative', height: '50px', zIndex: 2 }} />
-                )}
-              </div>
-              <div style={{ borderTop: '1px solid #000', margin: '0 20px', paddingTop: '4px', fontWeight: 'bold' }}>
-                Authorized Signatory
-              </div>
+            <td style={{ padding: '12px 8px', border: '1px solid #CCC', verticalAlign: 'bottom', position: 'relative' }}>
+              <SignatureBlock
+                companyName={profile?.companyName}
+                authorizedSignatory="Authorized Signatory"
+                hideCompanyLabel={true}
+              />
             </td>
           </tr>
         </tbody>

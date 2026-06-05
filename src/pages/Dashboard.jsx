@@ -89,24 +89,44 @@ const Dashboard = () => {
 
       {/* Quick Actions */}
       <div>
-        <h2 className="text-h2" style={{ fontSize: 'var(--font-size-md)' }}>Quick Actions</h2>
-        <Card 
-          style={{ padding: '0', display: 'flex', overflow: 'hidden', cursor: 'pointer', border: '1px solid var(--color-orange-500)' }} 
-          onClick={() => navigate('/create')}
-        >
-          <div style={{ backgroundColor: 'var(--color-orange-50)', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid var(--color-orange-100)' }}>
-            <div style={{ backgroundColor: 'var(--color-orange-500)', padding: '12px', borderRadius: '50%', color: 'white' }}>
-              <Plus size={24} />
+        <h2 className="text-h2" style={{ fontSize: 'var(--font-size-md)', marginBottom: '16px' }}>Quick Actions</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
+          <Card 
+            style={{ padding: '0', display: 'flex', overflow: 'hidden', cursor: 'pointer', border: '1px solid var(--color-orange-500)' }} 
+            onClick={() => navigate('/create')}
+          >
+            <div style={{ backgroundColor: 'var(--color-orange-50)', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid var(--color-orange-100)' }}>
+              <div style={{ backgroundColor: 'var(--color-orange-500)', padding: '12px', borderRadius: '50%', color: 'white' }}>
+                <Plus size={24} />
+              </div>
             </div>
-          </div>
-          <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <h3 className="text-h3" style={{ margin: '0 0 4px 0', color: 'var(--color-orange-600)' }}>New Quotation</h3>
-            <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: 'var(--font-size-sm)' }}>Create a professional estimate</p>
-          </div>
-          <div style={{ padding: '24px', display: 'flex', alignItems: 'center', color: 'var(--color-orange-500)' }}>
-            <ArrowRight size={20} />
-          </div>
-        </Card>
+            <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <h3 className="text-h3" style={{ margin: '0 0 4px 0', color: 'var(--color-orange-600)' }}>New Quotation</h3>
+              <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: 'var(--font-size-sm)' }}>Create a professional estimate</p>
+            </div>
+            <div style={{ padding: '24px', display: 'flex', alignItems: 'center', color: 'var(--color-orange-500)' }}>
+              <ArrowRight size={20} />
+            </div>
+          </Card>
+
+          <Card 
+            style={{ padding: '0', display: 'flex', overflow: 'hidden', cursor: 'pointer', border: '1px solid var(--color-grey-300)' }} 
+            onClick={() => navigate('/create-challan')}
+          >
+            <div style={{ backgroundColor: 'var(--color-grey-50)', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid var(--color-grey-200)' }}>
+              <div style={{ backgroundColor: 'var(--color-grey-600)', padding: '12px', borderRadius: '50%', color: 'white' }}>
+                <FileText size={24} />
+              </div>
+            </div>
+            <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <h3 className="text-h3" style={{ margin: '0 0 4px 0', color: 'var(--color-grey-800)' }}>New Delivery Challan</h3>
+              <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: 'var(--font-size-sm)' }}>Create a dispatch document</p>
+            </div>
+            <div style={{ padding: '24px', display: 'flex', alignItems: 'center', color: 'var(--color-grey-500)' }}>
+              <ArrowRight size={20} />
+            </div>
+          </Card>
+        </div>
       </div>
       
       {/* Recent Activity */}

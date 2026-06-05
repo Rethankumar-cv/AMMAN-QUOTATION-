@@ -366,7 +366,7 @@ const CreateQuotation = () => {
 
       {/* Sticky Bottom Premium Action Area */}
       <div style={{ 
-        position: 'fixed', bottom: 0, left: 0, right: 0, 
+        position: 'fixed', bottom: '64px', left: 0, right: 0, 
         padding: '16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
         backgroundColor: 'var(--bg-surface)', borderTop: '1px solid var(--border-default)', 
         boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.08)', zIndex: 90, 

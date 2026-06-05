@@ -8,5 +8,8 @@ export const quotationStore = localforage.createInstance({
   description: 'Stores draft and finalized quotation records'
 });
 
-// We can easily instantiate more stores here in the future
-// export const equipmentStore = localforage.createInstance({...});
+export const challanStore = localforage.createInstance({
+  name: 'AmmanEarthMovers',
+  storeName: 'challans',
+  description: 'Stores draft and finalized delivery challan records'
+});

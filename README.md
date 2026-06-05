@@ -1,65 +1,80 @@
-# Amman Earth Movers - Quotation System
+# Amman Earth Movers – Quotation & Delivery Challan Module
 
-An offline-first, mobile-responsive Progressive Web Application (PWA) built to generate professional, print-ready PDF quotations for the heavy earthmoving and vehicle solutions industry.
+A professional, mobile-first, offline-capable React application designed specifically for Amman Earth Movers to generate, manage, and export high-quality PDF Quotations and Delivery Challans. 
 
-## 🚀 Core Features
+This application replaces traditional manual drafting with a structured, data-driven workflow that guarantees exact visual consistency across all mobile and desktop devices.
 
-- **100% Offline Capable**: Built with a local-first architecture (IndexedDB and LocalStorage), allowing field managers to generate quotes securely without an internet connection.
-- **PWA Ready**: Installable directly to the home screen on iOS, Android, and Desktop devices.
-- **Pixel-Perfect PDF Generation**: Uses `html2canvas` and `jsPDF` to translate the dynamic React DOM into high-resolution, A4-formatted PDF documents.
-- **Custom Branding Engine**: Dynamically upload company logos, authorized signatures, and rubber stamps (converted to Base64 and saved locally).
-- **Automated Calculations**: Calculates equipment hire, fuel, driver charges, transportation, and GST percentages dynamically.
-- **Smart Draft Management**: Debounced autosaving prevents data loss during browser crashes.
-- **Local Backup & Restore**: Export all quotations and settings as a portable JSON file, protected by strict sequence-rollback guardrails upon import.
-- **Native Mobile Sharing**: Integrates with the native Web Share API for instantly sending PDFs via WhatsApp, Email, or Slack on mobile devices.
+## Features
 
-## 🛠️ Technology Stack
+### 1. Quotation Generation Engine
+- **Intelligent Pricing Breakdowns:** Automatically calculates base rates, driver charges, fuel, transportation, and custom fees.
+- **Automated GST Computation:** Handles CGST, SGST, and auto-round-off to ensure mathematically perfect final grand totals.
+- **Customer & Job Profiling:** Captures comprehensive client data, including GST/PAN and exact equipment deployment locations.
+- **Customizable Terms:** Editable block for "Terms & Conditions" that neatly aligns with the document layout.
 
-- **Core**: React.js (Vite)
-- **Routing**: React Router v6
-- **Styling**: Vanilla CSS (CSS Variables for theming)
-- **Icons**: Lucide React
-- **Local Database**: LocalForage (IndexedDB Wrapper)
-- **PDF Engine**: html2canvas + jsPDF
-- **PWA**: vite-plugin-pwa
+### 2. Delivery Challan Module
+- **Dispatch Management:** Independent workflow to manage goods delivery, capturing Transporter, E-Way Bill No, and precise "Bill To" vs "Ship To" addresses.
+- **Dynamic Itemization:** Add unlimited items with built-in QTY/Rate calculations while enforcing an un-distorted PDF table structure.
 
-## 📦 Installation & Setup
+### 3. Professional PDF Export Pipeline
+- **Fixed A4 Precision:** Utilizes a rigid 794x1123px hidden template system to render PDFs perfectly. This prevents mobile browsers from expanding tables or scaling fonts.
+- **Integrated Signatures:** Automatically dynamically loads the authentic "Authorized Signatory" image natively onto the document.
+- **Instant Actions:** Generate, preview, download, and share directly via native OS share sheets on mobile.
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Rethankumar-cv/AMMAN-QUOTATION-.git
-   cd AMMAN-QUOTATION-
-   ```
+### 4. Robust Offline Database
+- **IndexedDB Architecture:** Powered by `localforage` for completely disconnected capabilities.
+- **Auto-Save Workspaces:** Drafts are stored locally instantly, ensuring no data loss due to accidental refreshes or network drops.
+- **Data Isolation:** Quotations and Delivery Challans are managed in completely isolated tables (`quotations` vs `challanStore`).
 
-2. **Install dependencies:**
+### 5. Unified Dashboard & History Center
+- **Tabbed Archiving:** Easily toggle between Quotations and Challan histories.
+- **Advanced Filtering & Sorting:** Search by reference number, client name, or sort by pricing and dates.
+- **Lifecycle Management:** Duplicate previous documents, archive old entries, or restore them instantly.
+
+## Tech Stack
+- **Frontend Framework:** React 18 with Vite
+- **Styling:** CSS3 variables with a mobile-first philosophy
+- **Routing:** React Router v6
+- **Database:** LocalForage (IndexedDB wrappers)
+- **PDF Generation:** `html2canvas` & `jsPDF`
+- **Icons:** Lucide React
+
+## Project Structure
+```text
+src/
+├── components/          
+│   ├── common/         # Reusable UI components (Input, Card, Button)
+│   ├── layout/         # Navigation bars and general layout wrappers
+│   └── pdf/            # Strict A4 layout templates for html2canvas
+│       ├── QuotationTemplate.jsx
+│       ├── ChallanTemplate.jsx
+│       └── SignatureBlock.jsx
+├── hooks/              # Custom logic for form states and auto-save
+│   ├── useQuotationForm.js
+│   └── useChallanForm.js
+├── pages/              # Application views (Dashboard, Create, Preview, History)
+├── services/           # DB interactions and PDF rendering engine
+└── styles/             # Global design tokens and resets
+```
+
+## Running the Application Locally
+
+1. **Install Dependencies:**
    ```bash
    npm install
    ```
 
-3. **Start the development server:**
+2. **Start Development Server:**
    ```bash
    npm run dev
    ```
 
-4. **Build for production:**
+3. **Production Build:**
    ```bash
    npm run build
    ```
 
-## 🌐 Deployment (Vercel)
-
-This project includes a `vercel.json` file ensuring React Router paths (e.g., `/history`, `/preview`) work seamlessly on static hosting without throwing 404 errors.
-
-1. Push the repository to GitHub.
-2. Import the project in your Vercel Dashboard.
-3. Vercel will automatically detect the Vite build settings.
-4. Click **Deploy**.
-
-## 🛡️ Data Integrity & Architecture
-
-- **No Cloud Required**: Designed specifically for data privacy; no Firebase, AWS, or backend servers are used.
-- **Duplicate Protection**: Alerts the user if a quotation is generated for the exact same client and parameters on the same day.
-- **Sequence Protection**: The quotation numbering (e.g., `AEM/26/0001`) dynamically tracks the calendar year and prevents rollback collisions during backup restorations.
-
-## 📄 Licensing
-Proprietary software built for Amman Earth Movers. All rights reserved.
+## Development & Maintenance Notes
+- **Styling:** Do NOT use external CSS frameworks. The project relies on a bespoke `index.css` token system to maintain the precise brand aesthetics of Amman Earth Movers.
+- **PDF Constraints:** Any changes made to `src/components/pdf/` must be tested on both Desktop and Mobile browsers, as the PDF generation pipeline requires exact dimensional constraints.
+- **Signatures:** The main signature file is located at `public/assets/signature.png`. The system will gracefully fall back to a blank space if this file is missing, but it is required for automatic signing.
