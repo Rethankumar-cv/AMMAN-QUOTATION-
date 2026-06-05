@@ -5,6 +5,7 @@ import Card from '../components/common/Card';
 import SectionHeader from '../components/common/SectionHeader';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
+import Combobox from '../components/common/Combobox';
 import Textarea from '../components/common/Textarea';
 import Button from '../components/common/Button';
 import { useQuotationForm } from '../hooks/useQuotationForm';
@@ -209,12 +210,25 @@ const CreateQuotation = () => {
         <Card>
           <SectionHeader title="Job & Rental Details" subtitle="Equipment specifications and scheduling." />
           <div className="grid-cols-2">
-            <Select 
+            <Combobox 
               label="Vehicle / Equipment" name="equipmentType"
               value={formData.jobDetails.equipmentType}
               onChange={handleJobChange} onBlur={handleJobBlur}
               error={errors['jobDetails.equipmentType']}
-              options={[{ value: 'Tipper', label: 'Tipper' }, { value: 'JCB', label: 'JCB' }, { value: 'Crane', label: 'Crane' }, { value: 'Roller', label: 'Roller' }, { value: 'Bobcat', label: 'Bobcat' }]} 
+              options={[
+                { value: 'JCB', label: 'JCB' }, 
+                { value: 'Excavator 120', label: 'Excavator 120' },
+                { value: 'Excavator 140', label: 'Excavator 140' },
+                { value: 'Excavator 200', label: 'Excavator 200' },
+                { value: 'Excavator 210', label: 'Excavator 210' },
+                { value: 'Excavator 220', label: 'Excavator 220' },
+                { value: 'Mini Excavator', label: 'Mini Excavator' },
+                { value: 'Skid Steer Loader', label: 'Skid Steer Loader' },
+                { value: 'Tipper', label: 'Tipper' }, 
+                { value: 'Crane', label: 'Crane' }, 
+                { value: 'Roller', label: 'Roller' }, 
+                { value: 'Bobcat', label: 'Bobcat' }
+              ]} 
               required 
             />
             <Select 
