@@ -80,6 +80,26 @@ export const useChallanForm = (challanId = null) => {
     return () => clearTimeout(saveTimeoutRef.current);
   }, [formData, wipKey]);
 
+  // Auto-update DC Number when Date changes
+  useEffect(() => {
+    if (formData.date) {
+      const dateStr = formData.date.replace(/-/g, '');
+      let serial = '001';
+      
+      if (formData.dcNo && formData.dcNo.startsWith('DC-')) {
+        const parts = formData.dcNo.split('-');
+        if (parts.length >= 3) {
+          serial = parts.slice(2).join('-');
+        }
+      }
+      
+      const newDcNo = `DC-${dateStr}-${serial}`;
+      if (formData.dcNo !== newDcNo) {
+        setFormData(prev => ({ ...prev, dcNo: newDcNo }));
+      }
+    }
+  }, [formData.date]);
+
   const clearDraft = () => {
     localStorage.removeItem(wipKey);
     setFormData(createEmptyChallan());
@@ -96,7 +116,16 @@ export const useChallanForm = (challanId = null) => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.date) newErrors['date'] = 'Date is required';
-    if (!formData.billTo.name) newErrors['billTo.name'] = 'Bill To Name is required';
+    
+    if (formData.transactionType === 'Bill From - Dispatch From' || formData.transactionType === 'Both') {
+      if (!formData.billFrom.name) newErrors['billFrom.name'] = 'Bill From Name is required';
+      if (!formData.dispatchFrom.address1) newErrors['dispatchFrom.address1'] = 'Dispatch From Address is required';
+    }
+    
+    if (formData.transactionType === 'Bill To - Ship To' || formData.transactionType === 'Both') {
+      if (!formData.billTo.name) newErrors['billTo.name'] = 'Bill To Name is required';
+      if (!formData.shipTo.address1) newErrors['shipTo.address1'] = 'Ship To Address is required';
+    }
     
     formData.items.forEach((item, index) => {
       if (!item.description) newErrors[`items.${index}.description`] = 'Description required';

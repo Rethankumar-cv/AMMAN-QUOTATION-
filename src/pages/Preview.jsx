@@ -90,6 +90,13 @@ const Preview = () => {
 
   const handleFinalize = async () => {
     if (!data) return;
+    
+    // Safety check: temporary quotations cannot be finalized to DB
+    if (!data.isGSTQuotation) {
+      alert("This is a temporary estimate and cannot be finalized to history. Please use Download or Print.");
+      return;
+    }
+
     const { formatted, ...cleanData } = data;
     const quoteToSave = { ...cleanData, status: 'finalized', updatedAt: new Date().toISOString() };
     await saveQuotation(quoteToSave);
@@ -320,9 +327,15 @@ const Preview = () => {
           boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.08)', zIndex: 90 
         }}>
           <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <Button variant="primary" className="w-full" onClick={handleFinalize} style={{ padding: '12px', fontSize: 'var(--font-size-md)', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.4)' }}>
-              Confirm & Save Final Quotation
-            </Button>
+            {data.isGSTQuotation ? (
+              <Button variant="primary" className="w-full" onClick={handleFinalize} style={{ padding: '12px', fontSize: 'var(--font-size-md)', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.4)' }}>
+                Confirm & Save Final Quotation
+              </Button>
+            ) : (
+              <Button variant="primary" className="w-full" onClick={handleDownload} disabled={isExporting} style={{ padding: '12px', fontSize: 'var(--font-size-md)', boxShadow: '0 4px 14px rgba(243, 146, 0, 0.4)' }}>
+                {isExporting ? 'Generating...' : 'Download Estimate PDF'}
+              </Button>
+            )}
           </div>
         </div>
       )}

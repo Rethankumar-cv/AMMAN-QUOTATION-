@@ -15,6 +15,10 @@ export const createEmptyQuotation = () => {
     status: 'draft', 
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    isGSTQuotation: true,
+    showTotal: true,
+    isSavedToHistory: true,
+    referenceType: 'official',
     customerDetails: {
       customerName: '',
       companyName: '',

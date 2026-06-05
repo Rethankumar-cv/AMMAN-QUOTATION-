@@ -41,3 +41,14 @@ export const generateNextReferenceNumber = () => {
   
   return `AEM/${currentYearStr}/${sequenceString}`;
 };
+
+/**
+ * Generates a temporary reference number for non-GST estimates.
+ * Does NOT increment or touch the official counter.
+ * Formats as: EST-YYYYMMDD-RND
+ */
+export const generateTempReferenceNumber = () => {
+  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const randomStr = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  return `EST-${dateStr}-${randomStr}`;
+};

@@ -53,12 +53,6 @@ const CreateChallan = () => {
 
   const handleReview = () => {
     if (validateForm()) {
-      if (!formData.dcNo) {
-        const dateStr = new Date().toISOString().slice(0,10).replace(/-/g, '');
-        const finalData = { ...formData, dcNo: `DC-${dateStr}-${Math.floor(Math.random()*1000)}` };
-        setFormData(finalData);
-        localStorage.setItem(wipKey, JSON.stringify(finalData));
-      }
       navigate(isEditMode ? `/preview-challan/${id}` : '/preview-challan/draft');
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -68,7 +62,6 @@ const CreateChallan = () => {
   const handleSaveDraftToDB = async () => {
     forceSaveDraft();
     let draftData = { ...formData, status: 'draft', updatedAt: new Date().toISOString() };
-    if (!draftData.dcNo) draftData.dcNo = `DC-DRAFT-${Math.floor(Math.random()*10000)}`;
     await saveChallan(draftData);
     if (!isEditMode) localStorage.removeItem(wipKey);
     window.alert("Delivery Challan draft saved successfully!");
@@ -78,10 +71,6 @@ const CreateChallan = () => {
   const handleFinalSave = async () => {
     if (validateForm()) {
       let finalData = { ...formData, status: 'finalized', updatedAt: new Date().toISOString() };
-      if (!finalData.dcNo) {
-        const dateStr = new Date().toISOString().slice(0,10).replace(/-/g, '');
-        finalData.dcNo = `DC-${dateStr}-${Math.floor(Math.random()*1000)}`;
-      }
       const savedChallan = await saveChallan(finalData);
       if (!isEditMode) localStorage.removeItem(wipKey);
       else localStorage.removeItem(`aem_edit_challan_${id}`);
@@ -145,6 +134,37 @@ const CreateChallan = () => {
         
         <Card>
           <SectionHeader title="Challan Details" subtitle="Primary dispatch information." />
+          
+          {/* Intelligent DC Number UI */}
+          <div className="form-group mb-4">
+            <label className="form-label">DC Number <span style={{ color: 'var(--color-error)' }}>*</span></label>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%' }}>
+              <div style={{ backgroundColor: 'var(--color-grey-100)', color: 'var(--color-grey-600)', padding: '0 16px', borderRadius: '14px', height: '52px', display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '15px' }}>
+                DC
+              </div>
+              <span style={{ color: 'var(--color-grey-400)', fontWeight: 'bold' }}>-</span>
+              <div style={{ backgroundColor: 'var(--color-grey-100)', color: 'var(--color-grey-600)', padding: '0 16px', borderRadius: '14px', height: '52px', display: 'flex', alignItems: 'center', fontWeight: 'bold', flex: 1, fontSize: '15px', justifyContent: 'center' }}>
+                {formData.date ? formData.date.replace(/-/g, '') : 'YYYYMMDD'}
+              </div>
+              <span style={{ color: 'var(--color-grey-400)', fontWeight: 'bold' }}>-</span>
+              <input 
+                type="text" 
+                className="form-input" 
+                style={{ flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: '15px', paddingLeft: '8px', paddingRight: '8px' }} 
+                value={formData.dcNo && formData.dcNo.startsWith('DC-') ? formData.dcNo.split('-').slice(2).join('-') : ''}
+                onChange={(e) => {
+                  let val = e.target.value.replace(/[^0-9]/g, '');
+                  if (val.length > 4) val = val.slice(0, 4);
+                  const dateStr = formData.date ? formData.date.replace(/-/g, '') : '';
+                  handleBaseChange({ target: { name: 'dcNo', value: `DC-${dateStr}-${val}` } });
+                }}
+                placeholder="Serial (e.g. 250)"
+                maxLength={4}
+              />
+            </div>
+            <p style={{ margin: '6px 0 0 0', fontSize: '12px', color: 'var(--text-secondary)' }}>Date section updates automatically. Edit the serial number as needed.</p>
+          </div>
+
           <div className="grid-cols-2">
             <Input label="Date" name="date" type="date" value={formData.date} onChange={handleBaseChange} error={errors['date']} required />
             <Input label="Time" name="time" type="time" value={formData.time} onChange={handleBaseChange} />
@@ -157,42 +177,61 @@ const CreateChallan = () => {
             <Input label="E-Way Bill No" name="eWayBillNo" value={formData.eWayBillNo} onChange={handleBaseChange} placeholder="If applicable" />
             <Select label="Reason" name="reason" value={formData.reason} onChange={handleBaseChange} options={[{ value: 'Hiring', label: 'Hiring' }, { value: 'Delivery', label: 'Delivery' }, { value: 'Return', label: 'Return' }]} />
           </div>
-          <Select label="Transaction Type" name="transactionType" value={formData.transactionType} onChange={handleBaseChange} options={[{ value: 'Bill From - Dispatch From', label: 'Bill From - Dispatch From' }, { value: 'Bill To - Ship To', label: 'Bill To - Ship To' }]} />
+          <Select 
+            label="Transaction Type" 
+            name="transactionType" 
+            value={formData.transactionType} 
+            onChange={handleBaseChange} 
+            options={[
+              { value: 'Bill From - Dispatch From', label: 'Bill From - Dispatch From' }, 
+              { value: 'Bill To - Ship To', label: 'Bill To - Ship To' },
+              { value: 'Both', label: 'Both (Show All Sections)' }
+            ]} 
+          />
         </Card>
 
         <Card>
           <SectionHeader title="Parties" subtitle="Billing and Shipping addresses." />
-          <div style={{ border: '1px solid var(--border-default)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '16px' }}>
-            <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)' }}>Bill From</h4>
-            <div className="grid-cols-2 mb-2">
-              <Input label="Company Name" value={formData.billFrom.name} onChange={(e) => handleNestedChange('billFrom', 'name', e.target.value)} />
-              <Input label="GSTIN" value={formData.billFrom.gst} onChange={(e) => handleNestedChange('billFrom', 'gst', e.target.value)} />
-            </div>
-            <Input label="Address" value={formData.billFrom.address} onChange={(e) => handleNestedChange('billFrom', 'address', e.target.value)} />
-          </div>
           
-          <div style={{ border: '1px solid var(--border-default)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '16px' }}>
-            <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)' }}>Bill To</h4>
-            <div className="grid-cols-2 mb-2">
-              <Input label="Company Name" value={formData.billTo.name} onChange={(e) => handleNestedChange('billTo', 'name', e.target.value)} error={errors['billTo.name']} required />
-              <Input label="GSTIN" value={formData.billTo.gst} onChange={(e) => handleNestedChange('billTo', 'gst', e.target.value)} />
+          {(formData.transactionType === 'Bill From - Dispatch From' || formData.transactionType === 'Both') && (
+            <div style={{ border: '1px solid var(--border-default)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '16px' }}>
+              <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)' }}>Bill From</h4>
+              <div className="grid-cols-2 mb-2">
+                <Input label="Company Name" value={formData.billFrom.name} onChange={(e) => handleNestedChange('billFrom', 'name', e.target.value)} error={errors['billFrom.name']} required />
+                <Input label="GSTIN" value={formData.billFrom.gst} onChange={(e) => handleNestedChange('billFrom', 'gst', e.target.value)} />
+              </div>
+              <Input label="Address" value={formData.billFrom.address} onChange={(e) => handleNestedChange('billFrom', 'address', e.target.value)} />
             </div>
-            <Input label="Address" value={formData.billTo.address} onChange={(e) => handleNestedChange('billTo', 'address', e.target.value)} />
-          </div>
+          )}
+          
+          {(formData.transactionType === 'Bill To - Ship To' || formData.transactionType === 'Both') && (
+            <div style={{ border: '1px solid var(--border-default)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '16px' }}>
+              <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)' }}>Bill To</h4>
+              <div className="grid-cols-2 mb-2">
+                <Input label="Company Name" value={formData.billTo.name} onChange={(e) => handleNestedChange('billTo', 'name', e.target.value)} error={errors['billTo.name']} required />
+                <Input label="GSTIN" value={formData.billTo.gst} onChange={(e) => handleNestedChange('billTo', 'gst', e.target.value)} />
+              </div>
+              <Input label="Address" value={formData.billTo.address} onChange={(e) => handleNestedChange('billTo', 'address', e.target.value)} />
+            </div>
+          )}
 
           <div className="grid-cols-2">
-            <div>
-              <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)' }}>Dispatch From</h4>
-              <Input label="Address Line 1" value={formData.dispatchFrom.address1} onChange={(e) => handleNestedChange('dispatchFrom', 'address1', e.target.value)} />
-              <div style={{ height: '8px' }} />
-              <Input label="City / PIN" value={formData.dispatchFrom.cityStatePin} onChange={(e) => handleNestedChange('dispatchFrom', 'cityStatePin', e.target.value)} />
-            </div>
-            <div>
-              <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)' }}>Ship To</h4>
-              <Input label="Address Line 1" value={formData.shipTo.address1} onChange={(e) => handleNestedChange('shipTo', 'address1', e.target.value)} />
-              <div style={{ height: '8px' }} />
-              <Input label="City / PIN" value={formData.shipTo.cityStatePin} onChange={(e) => handleNestedChange('shipTo', 'cityStatePin', e.target.value)} />
-            </div>
+            {(formData.transactionType === 'Bill From - Dispatch From' || formData.transactionType === 'Both') && (
+              <div>
+                <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)' }}>Dispatch From</h4>
+                <Input label="Address Line 1" value={formData.dispatchFrom.address1} onChange={(e) => handleNestedChange('dispatchFrom', 'address1', e.target.value)} error={errors['dispatchFrom.address1']} required />
+                <div style={{ height: '8px' }} />
+                <Input label="City / PIN" value={formData.dispatchFrom.cityStatePin} onChange={(e) => handleNestedChange('dispatchFrom', 'cityStatePin', e.target.value)} />
+              </div>
+            )}
+            {(formData.transactionType === 'Bill To - Ship To' || formData.transactionType === 'Both') && (
+              <div style={formData.transactionType === 'Bill To - Ship To' ? { gridColumn: '1 / -1' } : {}}>
+                <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)' }}>Ship To</h4>
+                <Input label="Address Line 1" value={formData.shipTo.address1} onChange={(e) => handleNestedChange('shipTo', 'address1', e.target.value)} error={errors['shipTo.address1']} required />
+                <div style={{ height: '8px' }} />
+                <Input label="City / PIN" value={formData.shipTo.cityStatePin} onChange={(e) => handleNestedChange('shipTo', 'cityStatePin', e.target.value)} />
+              </div>
+            )}
           </div>
         </Card>
 

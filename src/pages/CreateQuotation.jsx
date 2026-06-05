@@ -74,6 +74,11 @@ const CreateQuotation = () => {
   };
 
   const handleSaveDraftToDB = async () => {
+    if (!formData.isGSTQuotation) {
+      window.alert("Non-GST quotations cannot be saved to history. They are temporary estimates only.");
+      return;
+    }
+
     // We want to force save to local state first just in case
     forceSaveDraft();
     
@@ -170,6 +175,41 @@ const CreateQuotation = () => {
       {/* Form Fields Workspace */}
       <div style={{ opacity: isFinalized ? 0.6 : 1, pointerEvents: isFinalized ? 'none' : 'auto', display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
         
+        {/* Document Settings */}
+        <Card>
+          <SectionHeader title="Document Settings" subtitle="Configure quotation behavior and PDF layout." />
+          <div className="grid-cols-2 mb-4">
+            <div className="form-group">
+              <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', margin: 0 }}>
+                <input 
+                  type="checkbox" 
+                  checked={formData.isGSTQuotation} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, isGSTQuotation: e.target.checked }))} 
+                  style={{ width: '18px', height: '18px', accentColor: 'var(--color-orange-500)' }} 
+                />
+                <span style={{ fontWeight: '500' }}>GST Quotation</span>
+              </label>
+            </div>
+            <div className="form-group">
+              <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', margin: 0 }}>
+                <input 
+                  type="checkbox" 
+                  checked={formData.showTotal} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, showTotal: e.target.checked }))} 
+                  style={{ width: '18px', height: '18px', accentColor: 'var(--color-orange-500)' }} 
+                />
+                <span style={{ fontWeight: '500' }}>Show Total Amount</span>
+              </label>
+            </div>
+          </div>
+          {!formData.isGSTQuotation && (
+            <div style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)', color: 'var(--color-orange-600)', padding: '12px 16px', borderRadius: '8px', fontSize: '13px', display: 'flex', alignItems: 'flex-start', gap: '8px', marginTop: '4px' }}>
+              <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+              <span>This quotation will be generated as a temporary estimate and will not be saved in quotation history.</span>
+            </div>
+          )}
+        </Card>
+
         {/* Customer Information */}
         <Card>
           <SectionHeader title="Customer Information" subtitle="Billing details for the client." />
@@ -388,7 +428,7 @@ const CreateQuotation = () => {
           </div>
           
           <div style={{ flex: 1, display: 'flex', gap: '12px' }}>
-            {!isFinalized && (
+            {!isFinalized && formData.isGSTQuotation && (
               <Button variant="outline" className="w-full" onClick={handleSaveDraftToDB} style={{ flex: 1, padding: '14px', backgroundColor: 'white', color: 'var(--text-primary)' }}>
                 <Save size={18} className="hidden sm:inline" style={{ marginRight: '4px' }} /> Save
               </Button>

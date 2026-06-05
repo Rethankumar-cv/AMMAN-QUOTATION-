@@ -2,7 +2,7 @@ import React from 'react';
 import SignatureBlock from './SignatureBlock';
 
 const QuotationTemplate = React.forwardRef(({ data, profile }, ref) => {
-  const { formatted, customerDetails = {}, jobDetails = {}, pricingBreakdown = {}, brandingMetadata = {} } = data;
+  const { formatted, customerDetails = {}, jobDetails = {}, pricingBreakdown = {}, brandingMetadata = {}, isGSTQuotation = true, showTotal = true } = data;
 
   // Format currency helper to ensure '0' is shown if empty
   const fmt = (val) => val && Number(val) !== 0 ? Number(val).toLocaleString('en-IN') : '0';
@@ -79,12 +79,21 @@ const QuotationTemplate = React.forwardRef(({ data, profile }, ref) => {
             <td style={{ border: '1px solid #CCC', padding: '6px 8px', fontWeight: 'bold' }}>Work Location</td>
             <td style={{ border: '1px solid #CCC', padding: '6px 8px' }}>{jobDetails.workLocation || '-'}</td>
           </tr>
-          <tr>
-            <td style={{ border: '1px solid #CCC', padding: '6px 8px', fontWeight: 'bold' }}>GST / PAN</td>
-            <td style={{ border: '1px solid #CCC', padding: '6px 8px' }}>{customerDetails.gstPan || '-'}</td>
-            <td style={{ border: '1px solid #CCC', padding: '6px 8px', fontWeight: 'bold' }}>Required Date</td>
-            <td style={{ border: '1px solid #CCC', padding: '6px 8px' }}>{formatted.reqDate || '-'}</td>
-          </tr>
+          {isGSTQuotation ? (
+            <tr>
+              <td style={{ border: '1px solid #CCC', padding: '6px 8px', fontWeight: 'bold' }}>GST / PAN</td>
+              <td style={{ border: '1px solid #CCC', padding: '6px 8px' }}>{customerDetails.gstPan || '-'}</td>
+              <td style={{ border: '1px solid #CCC', padding: '6px 8px', fontWeight: 'bold' }}>Required Date</td>
+              <td style={{ border: '1px solid #CCC', padding: '6px 8px' }}>{formatted.reqDate || '-'}</td>
+            </tr>
+          ) : (
+            <tr>
+              <td style={{ border: '1px solid #CCC', padding: '6px 8px', fontWeight: 'bold' }}>Required Date</td>
+              <td style={{ border: '1px solid #CCC', padding: '6px 8px' }}>{formatted.reqDate || '-'}</td>
+              <td style={{ border: '1px solid #CCC', padding: '6px 8px' }}></td>
+              <td style={{ border: '1px solid #CCC', padding: '6px 8px' }}></td>
+            </tr>
+          )}
         </tbody>
       </table>
 
@@ -117,16 +126,20 @@ const QuotationTemplate = React.forwardRef(({ data, profile }, ref) => {
             <td style={{ padding: '8px', borderBottom: '1px solid #E5E7EB', borderRight: '1px solid #CCC', borderLeft: '1px solid #CCC' }}>Other Charges</td>
             <td style={{ padding: '8px', textAlign: 'right', borderBottom: '1px solid #E5E7EB', borderRight: '1px solid #CCC' }}>{fmt(pricingBreakdown.otherCharges)}</td>
           </tr>
-          <tr>
-            <td style={{ padding: '8px', borderBottom: '1px solid #E5E7EB', borderRight: '1px solid #CCC', borderLeft: '1px solid #CCC' }}>{formatted.gstLabel}</td>
-            <td style={{ padding: '8px', textAlign: 'right', borderBottom: '1px solid #E5E7EB', borderRight: '1px solid #CCC' }}>{formatted.gstAmount}</td>
-          </tr>
-          <tr style={{ backgroundColor: '#F3F4F6' }}>
-            <td style={{ padding: '12px 8px', fontWeight: 'bold', border: '1px solid #CCC' }}>GRAND TOTAL</td>
-            <td style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 'bold', fontSize: '14px', border: '1px solid #CCC' }}>
-              ₹ {formatted.grandTotal}
-            </td>
-          </tr>
+          {isGSTQuotation && (
+            <tr>
+              <td style={{ padding: '8px', borderBottom: '1px solid #E5E7EB', borderRight: '1px solid #CCC', borderLeft: '1px solid #CCC' }}>{formatted.gstLabel}</td>
+              <td style={{ padding: '8px', textAlign: 'right', borderBottom: '1px solid #E5E7EB', borderRight: '1px solid #CCC' }}>{formatted.gstAmount}</td>
+            </tr>
+          )}
+          {showTotal && (
+            <tr style={{ backgroundColor: '#F3F4F6' }}>
+              <td style={{ padding: '12px 8px', fontWeight: 'bold', border: '1px solid #CCC' }}>GRAND TOTAL</td>
+              <td style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 'bold', fontSize: '14px', border: '1px solid #CCC' }}>
+                ₹ {formatted.grandTotal}
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
 

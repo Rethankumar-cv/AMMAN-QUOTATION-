@@ -61,51 +61,103 @@ const ChallanTemplate = React.forwardRef(({ data, profile }, ref) => {
             <td style={{ border: '1px solid #CCC', padding: '6px' }}><strong>Time:</strong> <br/>{fmtEmptyStr(data.time)}</td>
             <td style={{ border: '1px solid #CCC', padding: '6px' }}><strong>Vehicle No:</strong> <br/>{fmtEmptyStr(data.vehicleNo)}</td>
             <td style={{ border: '1px solid #CCC', padding: '6px' }}><strong>Reason:</strong> <br/>{fmtEmptyStr(data.reason)}</td>
-            <td style={{ border: '1px solid #CCC', padding: '6px' }}><strong>Transaction Type:</strong> <br/>{fmtEmptyStr(data.transactionType)}</td>
+            <td style={{ border: '1px solid #CCC', padding: '6px' }}><strong>Transaction Type:</strong> <br/>{data.transactionType === 'Both' ? 'Dispatch and Ship' : fmtEmptyStr(data.transactionType)}</td>
           </tr>
         </tbody>
       </table>
 
       {/* Two-column Party Section */}
       <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '12px', tableLayout: 'fixed' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#E5E7EB' }}>
-            <th style={{ border: '1px solid #CCC', padding: '6px', width: '50%', textAlign: 'center' }}>BILL FROM</th>
-            <th style={{ border: '1px solid #CCC', padding: '6px', width: '50%', textAlign: 'center' }}>BILL TO</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
-              <strong>{data.billFrom?.name}</strong><br/>
-              {data.billFrom?.gst && <>GSTIN: {data.billFrom.gst}<br/></>}
-              {data.billFrom?.address && <>{data.billFrom.address}<br/></>}
-              {data.billFrom?.state && <>{data.billFrom.state}</>}
-            </td>
-            <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
-              <strong>{data.billTo?.name}</strong><br/>
-              {data.billTo?.gst && <>GSTIN: {data.billTo.gst}<br/></>}
-              {data.billTo?.address && <>{data.billTo.address}<br/></>}
-              {data.billTo?.state && <>{data.billTo.state}</>}
-            </td>
-          </tr>
-          <tr style={{ backgroundColor: '#E5E7EB' }}>
-            <th style={{ border: '1px solid #CCC', padding: '6px', textAlign: 'center' }}>DISPATCH FROM</th>
-            <th style={{ border: '1px solid #CCC', padding: '6px', textAlign: 'center' }}>SHIP TO</th>
-          </tr>
-          <tr>
-            <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
-              {data.dispatchFrom?.address1 && <>{data.dispatchFrom.address1}<br/></>}
-              {data.dispatchFrom?.address2 && <>{data.dispatchFrom.address2}<br/></>}
-              {data.dispatchFrom?.cityStatePin && <>{data.dispatchFrom.cityStatePin}</>}
-            </td>
-            <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
-              {data.shipTo?.address1 && <>{data.shipTo.address1}<br/></>}
-              {data.shipTo?.address2 && <>{data.shipTo.address2}<br/></>}
-              {data.shipTo?.cityStatePin && <>{data.shipTo.cityStatePin}</>}
-            </td>
-          </tr>
-        </tbody>
+        {data.transactionType === 'Both' ? (
+          <>
+            <thead>
+              <tr style={{ backgroundColor: '#E5E7EB' }}>
+                <th style={{ border: '1px solid #CCC', padding: '6px', width: '50%', textAlign: 'center' }}>BILL FROM</th>
+                <th style={{ border: '1px solid #CCC', padding: '6px', width: '50%', textAlign: 'center' }}>BILL TO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
+                  <strong>{data.billFrom?.name}</strong><br/>
+                  {data.billFrom?.gst && <>GSTIN: {data.billFrom.gst}<br/></>}
+                  {data.billFrom?.address && <>{data.billFrom.address}<br/></>}
+                  {data.billFrom?.state && <>{data.billFrom.state}</>}
+                </td>
+                <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
+                  <strong>{data.billTo?.name}</strong><br/>
+                  {data.billTo?.gst && <>GSTIN: {data.billTo.gst}<br/></>}
+                  {data.billTo?.address && <>{data.billTo.address}<br/></>}
+                  {data.billTo?.state && <>{data.billTo.state}</>}
+                </td>
+              </tr>
+              <tr style={{ backgroundColor: '#E5E7EB' }}>
+                <th style={{ border: '1px solid #CCC', padding: '6px', textAlign: 'center' }}>DISPATCH FROM</th>
+                <th style={{ border: '1px solid #CCC', padding: '6px', textAlign: 'center' }}>SHIP TO</th>
+              </tr>
+              <tr>
+                <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
+                  {data.dispatchFrom?.address1 && <>{data.dispatchFrom.address1}<br/></>}
+                  {data.dispatchFrom?.address2 && <>{data.dispatchFrom.address2}<br/></>}
+                  {data.dispatchFrom?.cityStatePin && <>{data.dispatchFrom.cityStatePin}</>}
+                </td>
+                <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
+                  {data.shipTo?.address1 && <>{data.shipTo.address1}<br/></>}
+                  {data.shipTo?.address2 && <>{data.shipTo.address2}<br/></>}
+                  {data.shipTo?.cityStatePin && <>{data.shipTo.cityStatePin}</>}
+                </td>
+              </tr>
+            </tbody>
+          </>
+        ) : data.transactionType === 'Bill To - Ship To' ? (
+          <>
+            <thead>
+              <tr style={{ backgroundColor: '#E5E7EB' }}>
+                <th style={{ border: '1px solid #CCC', padding: '6px', width: '50%', textAlign: 'center' }}>BILL TO</th>
+                <th style={{ border: '1px solid #CCC', padding: '6px', width: '50%', textAlign: 'center' }}>SHIP TO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
+                  <strong>{data.billTo?.name}</strong><br/>
+                  {data.billTo?.gst && <>GSTIN: {data.billTo.gst}<br/></>}
+                  {data.billTo?.address && <>{data.billTo.address}<br/></>}
+                  {data.billTo?.state && <>{data.billTo.state}</>}
+                </td>
+                <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
+                  {data.shipTo?.address1 && <>{data.shipTo.address1}<br/></>}
+                  {data.shipTo?.address2 && <>{data.shipTo.address2}<br/></>}
+                  {data.shipTo?.cityStatePin && <>{data.shipTo.cityStatePin}</>}
+                </td>
+              </tr>
+            </tbody>
+          </>
+        ) : (
+          <>
+            <thead>
+              <tr style={{ backgroundColor: '#E5E7EB' }}>
+                <th style={{ border: '1px solid #CCC', padding: '6px', width: '50%', textAlign: 'center' }}>BILL FROM</th>
+                <th style={{ border: '1px solid #CCC', padding: '6px', width: '50%', textAlign: 'center' }}>DISPATCH FROM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
+                  <strong>{data.billFrom?.name}</strong><br/>
+                  {data.billFrom?.gst && <>GSTIN: {data.billFrom.gst}<br/></>}
+                  {data.billFrom?.address && <>{data.billFrom.address}<br/></>}
+                  {data.billFrom?.state && <>{data.billFrom.state}</>}
+                </td>
+                <td style={{ border: '1px solid #CCC', padding: '8px', verticalAlign: 'top', height: '60px' }}>
+                  {data.dispatchFrom?.address1 && <>{data.dispatchFrom.address1}<br/></>}
+                  {data.dispatchFrom?.address2 && <>{data.dispatchFrom.address2}<br/></>}
+                  {data.dispatchFrom?.cityStatePin && <>{data.dispatchFrom.cityStatePin}</>}
+                </td>
+              </tr>
+            </tbody>
+          </>
+        )}
       </table>
 
       {/* Item Table */}
